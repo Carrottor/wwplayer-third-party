@@ -1,0 +1,2 @@
+# Preserve license text and patch context bytes across Windows and Unix clones.
+* -text

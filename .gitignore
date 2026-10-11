@@ -1,0 +1,10 @@
+versions/*/sources/*.tar
+versions/*/sources/*.tar.gz
+versions/*/sources/*.tar.xz
+versions/*/sources/*.tar.bz2
+versions/*/sources/*.tgz
+versions/*/sources/*.zip
+versions/*/work/
+versions/*/build-scripts/winbuild/
+*.download
+*.log

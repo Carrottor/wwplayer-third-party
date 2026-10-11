@@ -1,0 +1,516 @@
+{
+  "schemaVersion": 2,
+  "entries": [
+    {
+      "name": "mpv",
+      "license": "LGPL-2.1-or-later; combined runtime LGPL-3.0-or-later",
+      "commit": "e8673660ab7ee5d4ea8f93e4bf3a6e170ab2a19a",
+      "archive": "mpv-upstream.tar.gz"
+    },
+    {
+      "name": "ffmpeg",
+      "license": "LGPL-3.0-or-later",
+      "commit": "ad53728984531cebdb027e70e78d7165a6bdfe20",
+      "archive": "ffmpeg-upstream.tar.gz"
+    },
+    {
+      "name": "openal-soft",
+      "license": "LGPL-2.0-or-later",
+      "commit": "cb3c3f34bc286fba888fe89544c93a36eb5704d7",
+      "archive": "openal-soft-cb3c3f34bc286fba888fe89544c93a36eb5704d7.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libsoxr",
+      "license": "LGPL-2.1-or-later",
+      "commit": "945b592b70470e29f917f4de89b4281fbbd540c0",
+      "archive": "libsoxr-945b592b70470e29f917f4de89b4281fbbd540c0.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libssh",
+      "license": "LGPL-2.1-or-later",
+      "commit": "6c7fbc2abab331738fc3cc26c65be36481cec670",
+      "archive": "libssh-6c7fbc2abab331738fc3cc26c65be36481cec670.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libzvbi",
+      "license": "LGPL-2.1-or-later",
+      "commit": "2e159525bdf62e6132f0d20e0376b36bf6eec4bd",
+      "archive": "libzvbi-2e159525bdf62e6132f0d20e0376b36bf6eec4bd.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "fribidi",
+      "license": "LGPL-2.1-or-later",
+      "commit": "069a7e3d31e6aa74f2068a8e0804106ce7906639",
+      "archive": "fribidi-069a7e3d31e6aa74f2068a8e0804106ce7906639.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libbluray",
+      "license": "LGPL-2.1-or-later",
+      "commit": "d75c88e54c893e5cbf4c61d356477655eb435769",
+      "archive": "libbluray-d75c88e54c893e5cbf4c61d356477655eb435769.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libudfread",
+      "license": "LGPL-2.1-or-later",
+      "commit": "139a2194525f2745b98a98e4d8fa627d07440176",
+      "archive": "libudfread-139a2194525f2745b98a98e4d8fa627d07440176.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "lame",
+      "license": "LGPL-2.0-or-later",
+      "commit": "9a5b35c430a2e6d150d65a96c7d7acdd64962a8f",
+      "archive": "lame-9a5b35c430a2e6d150d65a96c7d7acdd64962a8f.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libsrt",
+      "license": "MPL-2.0",
+      "commit": "a13859e845cf374f2bbbd53d1819ad400dcede66",
+      "archive": "libsrt-a13859e845cf374f2bbbd53d1819ad400dcede66.tar.gz",
+      "submodules": [
+        {
+          "path": "submodules/abi-compliance-checker",
+          "commit": "7c175c45a8ba9ac41b8e47d8ebbab557b623b18e",
+          "archive": "libsrt--submodules--abi-compliance-checker-7c175c45a8ba9ac41b8e47d8ebbab557b623b18e.tar.gz"
+        }
+      ]
+    },
+    {
+      "name": "libiconv",
+      "version": "1.18",
+      "license": "LGPL-2.1-or-later",
+      "archive": "libiconv-1.18.tar.gz"
+    },
+    {
+      "name": "zlib",
+      "commit": "e15d0078380d0619615176fe4c6ceede55fe534e",
+      "archive": "zlib-e15d0078380d0619615176fe4c6ceede55fe534e.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libpng",
+      "commit": "cae474558968f015124d7369556a4b1016276e3a",
+      "archive": "libpng-cae474558968f015124d7369556a4b1016276e3a.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "brotli",
+      "commit": "0d1f6297d6a4f6e2acd5e50ae9a5d22c3f55ba6d",
+      "archive": "brotli-0d1f6297d6a4f6e2acd5e50ae9a5d22c3f55ba6d.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "freetype2",
+      "commit": "27eeaf1170edcecb46b9e290a4c102a1096144bd",
+      "archive": "freetype2-27eeaf1170edcecb46b9e290a4c102a1096144bd.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "harfbuzz",
+      "commit": "9d7bba088a7cd559bf83d1ce51ad54417f4d929b",
+      "archive": "harfbuzz-9d7bba088a7cd559bf83d1ce51ad54417f4d929b.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "expat",
+      "commit": "236c3f8f949209501b568032553c17577901c7ec",
+      "archive": "expat-236c3f8f949209501b568032553c17577901c7ec.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "fontconfig",
+      "commit": "f206d49b7f2f578e39ceee02e8c2e040c5a25e9a",
+      "archive": "fontconfig-f206d49b7f2f578e39ceee02e8c2e040c5a25e9a.tar.gz",
+      "appliedBuildCommit": "e0225950d3463fe0b2f1a0e5c04daab22f7a796f",
+      "patch": "fontconfig-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "libunibreak",
+      "commit": "3ce4bfa3129ff3738046a44a6db533d2ce25af2b",
+      "archive": "libunibreak-3ce4bfa3129ff3738046a44a6db533d2ce25af2b.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libass",
+      "commit": "f9fd3d20dff1cd84b7c74c8ae7f79711ad7736fa",
+      "archive": "libass-f9fd3d20dff1cd84b7c74c8ae7f79711ad7736fa.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libxml2",
+      "commit": "ddcb79dc9934fd8a26263f6368c4eb7aa43f6d49",
+      "archive": "libxml2-ddcb79dc9934fd8a26263f6368c4eb7aa43f6d49.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libmodplug",
+      "commit": "d1b97ed0020bc620a059d3675d1854b40bd2608d",
+      "archive": "libmodplug-d1b97ed0020bc620a059d3675d1854b40bd2608d.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "ogg",
+      "commit": "be05b13e98b048f0b5a0f5fa8ce514d56db5f822",
+      "archive": "ogg-be05b13e98b048f0b5a0f5fa8ce514d56db5f822.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "vorbis",
+      "commit": "c2aa86b05e981c96bf381fc6aa11cdd03eccc2fb",
+      "archive": "vorbis-c2aa86b05e981c96bf381fc6aa11cdd03eccc2fb.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "vulkan-header",
+      "commit": "11d6898377797e07dbd543aaaa367e4465074597",
+      "archive": "vulkan-header-11d6898377797e07dbd543aaaa367e4465074597.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "vulkan",
+      "commit": "a8c12ce7fe9301d8c95bbd6b29b4ece37f8ebe23",
+      "archive": "vulkan-a8c12ce7fe9301d8c95bbd6b29b4ece37f8ebe23.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libsdl2",
+      "commit": "a2e7c76bda17c853ba93c7d2c9fdddf8a9d621d1",
+      "archive": "libsdl2-a2e7c76bda17c853ba93c7d2c9fdddf8a9d621d1.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libopenmpt",
+      "archive": "libopenmpt-0.7.12+release.autotools.tar.gz"
+    },
+    {
+      "name": "libjpeg",
+      "commit": "5966050641633f9298b03f6b99a625067b22a91c",
+      "archive": "libjpeg-5966050641633f9298b03f6b99a625067b22a91c.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "lcms2",
+      "commit": "e2c0840b3c5867947dcd84a1ee91289c67b61389",
+      "archive": "lcms2-e2c0840b3c5867947dcd84a1ee91289c67b61389.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "opus",
+      "commit": "3da9f7a6db1c05c3996cb363a9d1931a978bf1be",
+      "archive": "opus-3da9f7a6db1c05c3996cb363a9d1931a978bf1be.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "speex",
+      "commit": "05895229896dc942d453446eba6f9f5ddcf95422",
+      "archive": "speex-05895229896dc942d453446eba6f9f5ddcf95422.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libbs2b",
+      "commit": "5ca2d59888df047f1e4b028e3a2fd5be8b5a7277",
+      "archive": "libbs2b-5ca2d59888df047f1e4b028e3a2fd5be8b5a7277.tar.gz",
+      "appliedBuildCommit": "1098b30daff8ff9cf55e9a026dc924081f47aa94",
+      "patch": "libbs2b-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "libvpx",
+      "commit": "4780fac9612992f8584227ea508c298fe8c01d05",
+      "archive": "libvpx-4780fac9612992f8584227ea508c298fe8c01d05.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libwebp",
+      "commit": "733c91e461c18cf1127c9ed0a80dccbcfed599d3",
+      "archive": "libwebp-733c91e461c18cf1127c9ed0a80dccbcfed599d3.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "svtav1",
+      "commit": "f9100ab22482a7741a4f4081f8067ffb8217e3c5",
+      "archive": "svtav1-f9100ab22482a7741a4f4081f8067ffb8217e3c5.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "xxhash",
+      "commit": "c0b5ea995d66691734b1a79ad89e73a0d2fd5a53",
+      "archive": "xxhash-c0b5ea995d66691734b1a79ad89e73a0d2fd5a53.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "dav1d",
+      "commit": "54706fc6bc0cdecab7e9593974a4039cc038fca7",
+      "archive": "dav1d-54706fc6bc0cdecab7e9593974a4039cc038fca7.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "uavs3d",
+      "commit": "0e20d2c291853f196c68922a264bcd8471d75b68",
+      "archive": "uavs3d-0e20d2c291853f196c68922a264bcd8471d75b68.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "graphengine",
+      "commit": "989aaf3a4363c1ae00e50bfa31c92fa8ad7590e1",
+      "archive": "graphengine-989aaf3a4363c1ae00e50bfa31c92fa8ad7590e1.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libzimg",
+      "commit": "1ad1895d5ff0bbe69c61243f9996aede713d1b5f",
+      "archive": "libzimg-1ad1895d5ff0bbe69c61243f9996aede713d1b5f.tar.gz",
+      "patch": "libzimg-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "zstd",
+      "commit": "5c7b7bad26808e6b40ac3b3d0075466e27738a9d",
+      "archive": "zstd-5c7b7bad26808e6b40ac3b3d0075466e27738a9d.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "openssl",
+      "commit": "0ffaa24c6148514fa77f76a48ae48852df7be9e7",
+      "archive": "openssl-0ffaa24c6148514fa77f76a48ae48852df7be9e7.tar.gz",
+      "appliedBuildCommit": "5483dc0a5053865e469235b04d9d9593d4a2e083",
+      "patch": "openssl-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "libmysofa",
+      "commit": "90531bdb0b485dd36e8a14b3e37ce1c47c54d669",
+      "archive": "libmysofa-90531bdb0b485dd36e8a14b3e37ce1c47c54d669.tar.gz",
+      "submodules": [],
+      "componentPaths": [
+        ".appveyor.yml",
+        ".cproject",
+        ".gitattributes",
+        ".github",
+        ".gitignore",
+        ".project",
+        ".travis.yml",
+        "CMakeLists.txt",
+        "CODE_OF_CONDUCT.md",
+        "LICENSE",
+        "README.md",
+        "SECURITY.md",
+        "build",
+        "cmake",
+        "libmysofa.pc.cmake",
+        "mysofaConfig.cmake.in",
+        "params.json",
+        "share",
+        "src",
+        "symonics-mysofa.png",
+        "windows"
+      ]
+    },
+    {
+      "name": "libvpl",
+      "commit": "674d015bcb294bc39fa276e99a652ea045423e82",
+      "archive": "libvpl-674d015bcb294bc39fa276e99a652ea045423e82.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "highway",
+      "commit": "130c4b02ab074c57cdb4263fe5e04584be56904c",
+      "archive": "highway-130c4b02ab074c57cdb4263fe5e04584be56904c.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libjxl",
+      "commit": "196a43d996aa6ed33ebf98812a7c6d43b2b6d01b",
+      "archive": "libjxl-196a43d996aa6ed33ebf98812a7c6d43b2b6d01b.tar.gz",
+      "patch": "libjxl-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "glslang",
+      "commit": "8d6dd0e41424c25806ca20523430f2e4c3aeb1a1",
+      "archive": "glslang-8d6dd0e41424c25806ca20523430f2e4c3aeb1a1.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "spirv-headers",
+      "commit": "4015a331f5ffd6fc5c6fa7b03e08fb4a692491d7",
+      "archive": "spirv-headers-4015a331f5ffd6fc5c6fa7b03e08fb4a692491d7.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "spirv-tools",
+      "commit": "a9cdf5bdd25d516294b5c25502b67e6116ed7eb5",
+      "archive": "spirv-tools-a9cdf5bdd25d516294b5c25502b67e6116ed7eb5.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "shaderc",
+      "commit": "590d5667c06023f92f10de11858724138e9326b5",
+      "archive": "shaderc-590d5667c06023f92f10de11858724138e9326b5.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "spirv-cross",
+      "commit": "6c09849fe88c48eaed08413aa022aaa136a3a057",
+      "archive": "spirv-cross-6c09849fe88c48eaed08413aa022aaa136a3a057.tar.gz",
+      "appliedBuildCommit": "834a45717deb6c81709249e4438d460006e75e3c",
+      "patch": "spirv-cross-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "glad",
+      "commit": "e3c14f906127dea49ead20ff4d5878294d08b7ab",
+      "archive": "glad-e3c14f906127dea49ead20ff4d5878294d08b7ab.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "fast_float",
+      "commit": "f6df0f29174054bb1ed06a9945416c8946a01292",
+      "archive": "fast_float-f6df0f29174054bb1ed06a9945416c8946a01292.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libplacebo",
+      "commit": "4d82c6898551068d4ae6a6b5538efcddc2c7cf64",
+      "archive": "libplacebo-4d82c6898551068d4ae6a6b5538efcddc2c7cf64.tar.gz",
+      "patch": "libplacebo-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "libaribcaption",
+      "commit": "c64c23b8905ba514b87c9789269e9f66f949ffe0",
+      "archive": "libaribcaption-c64c23b8905ba514b87c9789269e9f66f949ffe0.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "bzip2",
+      "commit": "66c46b8c9436613fd81bc5d03f63a61933a4dcc3",
+      "archive": "bzip2-66c46b8c9436613fd81bc5d03f63a61933a4dcc3.tar.gz",
+      "submodules": [
+        {
+          "path": "tests/input/bzip2-testfiles",
+          "commit": "35405e1f88802c5c0169c8a61a2ca2881897eecc",
+          "archive": "bzip2--tests--input--bzip2-testfiles-35405e1f88802c5c0169c8a61a2ca2881897eecc.tar.gz"
+        }
+      ]
+    },
+    {
+      "name": "xz",
+      "commit": "3d078b52adbff566ccfc51067dfbf742ecf3ef86",
+      "archive": "xz-3d078b52adbff566ccfc51067dfbf742ecf3ef86.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libarchive",
+      "commit": "280402b7f1e3a5ce89c1ba7a7d68b803771df82b",
+      "archive": "libarchive-280402b7f1e3a5ce89c1ba7a7d68b803771df82b.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "luajit",
+      "commit": "52f52587b37867ab19236eb6917001c2d6b662e7",
+      "archive": "luajit-52f52587b37867ab19236eb6917001c2d6b662e7.tar.gz",
+      "appliedBuildCommit": "3e34ac537170200d61170306622e72c2f8b29693",
+      "patch": "luajit-toolchain.patch",
+      "submodules": []
+    },
+    {
+      "name": "mujs",
+      "commit": "e892c9fdbbddba94e52f656ccb378ed4885e30cc",
+      "archive": "mujs-e892c9fdbbddba94e52f656ccb378ed4885e30cc.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "uchardet",
+      "commit": "06029ec3340cdf6bf9a6a537dafb3f39eda0560e",
+      "archive": "uchardet-06029ec3340cdf6bf9a6a537dafb3f39eda0560e.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libsixel",
+      "commit": "af12e5bc6f3f69ad83479da85ddb371420da9b17",
+      "archive": "libsixel-af12e5bc6f3f69ad83479da85ddb371420da9b17.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "subrandr",
+      "commit": "f2d74d8596bba07a82bfc0f389cd562ac8d71a00",
+      "archive": "subrandr-f2d74d8596bba07a82bfc0f389cd562ac8d71a00.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "libva",
+      "commit": "f13ba3b3817fd8ef3cb23525916fb447aa844feb",
+      "archive": "libva-f13ba3b3817fd8ef3cb23525916fb447aa844feb.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "amf-headers",
+      "commit": "c35f613aea2e5057a688c979e75b1cf24253297e",
+      "archive": "amf-headers-c35f613aea2e5057a688c979e75b1cf24253297e.tar.gz",
+      "submodules": [],
+      "componentPaths": [
+        "amf/public/include",
+        "LICENSE.txt"
+      ]
+    },
+    {
+      "name": "nvcodec-headers",
+      "commit": "eddcea9e27f6b772057c9b3f87de2cc1737faffc",
+      "archive": "nvcodec-headers-eddcea9e27f6b772057c9b3f87de2cc1737faffc.tar.gz",
+      "submodules": []
+    },
+    {
+      "name": "angle-headers",
+      "commit": "0e5d32f405901ab2b41b498c5c3cbccce383d7b6",
+      "archive": "angle-headers-0e5d32f405901ab2b41b498c5c3cbccce383d7b6.tar.gz",
+      "componentPaths": [
+        "include"
+      ],
+      "submodules": []
+    },
+    {
+      "name": "curl",
+      "version": "8.22.0",
+      "archive": "curl-8.22.0-source.tar.gz"
+    },
+    {
+      "name": "curl-zlibng",
+      "version": "2.3.3",
+      "archive": "curl-zlibng-2.3.3.tar.gz",
+      "url": "https://github.com/zlib-ng/zlib-ng/archive/refs/tags/2.3.3.tar.gz"
+    },
+    {
+      "name": "curl-zstd",
+      "version": "1.5.7",
+      "archive": "curl-zstd-1.5.7.tar.gz",
+      "url": "https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.gz"
+    },
+    {
+      "name": "curl-brotli",
+      "version": "1.2.0",
+      "archive": "curl-brotli-1.2.0.tar.gz",
+      "url": "https://github.com/google/brotli/archive/v1.2.0.tar.gz"
+    },
+    {
+      "name": "curl-nghttp2",
+      "version": "1.70.0",
+      "archive": "curl-nghttp2-1.70.0.tar.xz",
+      "url": "https://github.com/nghttp2/nghttp2/releases/download/v1.70.0/nghttp2-1.70.0.tar.xz"
+    },
+    {
+      "name": "vapoursynth-headers",
+      "version": "R65",
+      "archive": "vapoursynth-R65.tar.gz",
+      "scope": "API headers; the optional VapourSynth/VSScript DLLs are not distributed"
+    }
+  ]
+}

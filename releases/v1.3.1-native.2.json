@@ -1,0 +1,100 @@
+{
+  "schemaVersion": 1,
+  "repository": "Carrottor/wwplayer-third-party",
+  "tag": "v1.3.1-native.2",
+  "releaseUrl": "https://github.com/Carrottor/wwplayer-third-party/releases/tag/v1.3.1-native.2",
+  "sourceDownloadUrl": "https://github.com/Carrottor/wwplayer-third-party/releases/download/v1.3.1-native.2/wwplayer-third-party-v1.3.1-native.2-sources.tar.gz",
+  "sourceSha256": "06547cb15a9cf62d5df00c7d1a7069d9844f816e2bec6a8132887a0c65a95913",
+  "sourceBytes": 397532223,
+  "mpvCommit": "e8673660ab7ee5d4ea8f93e4bf3a6e170ab2a19a",
+  "ffmpegCommit": "ad53728984531cebdb027e70e78d7165a6bdfe20",
+  "ffmpegVersion": "N-125871-gad5372898",
+  "libmpvSha256": "5dbb4de3558700576c790294f33f1869383c8687327a45065224cd339596761b",
+  "patches": [
+    "patches/0001-dual-subtitles.patch",
+    "patches/0002-mingw-guid-linkage.patch",
+    "patches/0003-edl-segment-preroll.patch"
+  ],
+  "libarchive": {
+    "commit": "280402b7f1e3a5ce89c1ba7a7d68b803771df82b",
+    "options": [
+      "-DBUILD_SHARED_LIBS=OFF",
+      "-DENABLE_LZO=OFF",
+      "-DENABLE_ZLIB=ON",
+      "-DENABLE_ZSTD=ON",
+      "-DENABLE_OPENSSL=ON",
+      "-DENABLE_BZip2=ON",
+      "-DENABLE_ICONV=ON",
+      "-DENABLE_LIBXML2=ON",
+      "-DENABLE_EXPAT=ON",
+      "-DENABLE_LZMA=ON",
+      "-DENABLE_CPIO=OFF",
+      "-DENABLE_CAT=OFF",
+      "-DENABLE_TAR=OFF",
+      "-DENABLE_WERROR=OFF",
+      "-DBUILD_TESTING=OFF",
+      "-DENABLE_TEST=OFF"
+    ],
+    "lzo": false
+  },
+  "ffmpegLibraries": [
+    {
+      "file": "avcodec-63.dll",
+      "sha256": "afdc371e07cfc6aa8ac27a9afc22ff6ab5c6a444506e93ebe2fd0b80a73f2782"
+    },
+    {
+      "file": "avdevice-63.dll",
+      "sha256": "5ea63660bdd9b2a71d841035d3176583335566cd9759e33c5d0b539d55713c5b"
+    },
+    {
+      "file": "avfilter-12.dll",
+      "sha256": "ce4974ce84e0ad4671b6c5eec225c4be3ae8138799224ca90689814195b2a255"
+    },
+    {
+      "file": "avformat-63.dll",
+      "sha256": "0d0fc6e177c22cc5d68566b36d674695483419b13468b821ffa526f6bc556e95"
+    },
+    {
+      "file": "avutil-61.dll",
+      "sha256": "f2319d0add74606d594d9a9ad985a4fd816dd6fd98832ac293e5111572dc6323"
+    },
+    {
+      "file": "swresample-7.dll",
+      "sha256": "61e3f4c706ce6abc5d4d1fd867713006611a61f3319099d05f321e6ed587690d"
+    },
+    {
+      "file": "swscale-10.dll",
+      "sha256": "4312327e4e737bf54a70e292eb2ae8dc37ef54086d9eb2b247313a0a04381e9c"
+    }
+  ],
+  "sharpVersions": {
+    "aom": "3.14.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.4",
+    "cgif": "0.5.3",
+    "exif": "0.6.26",
+    "expat": "2.8.3",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.16",
+    "glib": "2.89.4",
+    "harfbuzz": "14.3.1",
+    "heif": "1.23.2",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.62.91",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.6",
+    "webp": "1.6.0",
+    "xml2": "2.15.3",
+    "zlib-ng": "2.3.3"
+  }
+}
