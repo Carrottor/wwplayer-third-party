@@ -1,0 +1,139 @@
+diff --git a/demux/timeline.h b/demux/timeline.h
+index 7bc7e9e0..b1d7e0df 100644
+--- a/demux/timeline.h
++++ b/demux/timeline.h
+@@ -9,6 +9,7 @@ struct timeline_part {
+     // (end time must match with start time of the next part)
+     double start, end;
+     double source_start;
++    double seek_preroll; // decode window before the requested source timestamp
+     char *url;
+     struct demuxer *source;
+ };
+diff --git a/demux/demux_edl.c b/demux/demux_edl.c
+index 71351b8b..7124a9c7 100644
+--- a/demux/demux_edl.c
++++ b/demux/demux_edl.c
+@@ -44,6 +44,7 @@ struct tl_part {
+     bool chapter_ts;
+     bool is_layout;
+     double length;              // length of the part (-1 if rest of the file)
++    double seek_preroll;         // decode-only window; does not change the range
+     char *title;
+ };
+ 
+@@ -227,6 +228,11 @@ static struct tl_root *parse_edl(bstr str, struct mp_log *log)
+             if (bstr_equals0(f_type, "mp4_dash")) {
+                 tl->dash = true;
+                 tl->init_fragment_url = get_param0(&ctx, tl, "init");
++            } else if (bstr_equals0(f_type, "wwplayer_preroll")) {
++                if (get_param_int(&ctx, "version", -1) != 1) {
++                    mp_err(log, "Unsupported segment preroll version.\n");
++                    goto error;
++                }
+             } else if (bstr_equals0(f_type, "no_clip")) {
+                 tl->no_clip = true;
+             } else if (bstr_equals0(f_type, "new_stream")) {
+@@ -298,6 +304,11 @@ static struct tl_root *parse_edl(bstr str, struct mp_log *log)
+             }
+             p.offset_set = get_param_time(&ctx, "start", &p.offset);
+             get_param_time(&ctx, "length", &p.length);
++            get_param_time(&ctx, "preroll", &p.seek_preroll);
++            if (p.seek_preroll < 0) {
++                mp_err(log, "Negative segment preroll.\n");
++                goto error;
++            }
+             bstr ts = get_param(&ctx, "timestamps");
+             if (bstr_equals0(ts, "chapters")) {
+                 p.chapter_ts = true;
+@@ -464,6 +475,11 @@ static struct timeline_par *build_timeline(struct timeline *root,
+         struct tl_part *part = &parts->parts[n];
+         struct demuxer *source = NULL;
+ 
++        if (part->seek_preroll && (tl->dash || tl->no_clip)) {
++            MP_ERR(root, "Segment preroll requires a clipped timeline.\n");
++            goto error;
++        }
++
+         if (tl->dash) {
+             part->offset = starttime;
+             if (part->length <= 0)
+@@ -533,6 +549,7 @@ static struct timeline_par *build_timeline(struct timeline *root,
+             .start = starttime,
+             .end = starttime + part->length,
+             .source_start = part->offset,
++            .seek_preroll = part->seek_preroll,
+             .source = source,
+             .url = talloc_strdup(tl, part->filename),
+         };
+diff --git a/demux/demux_timeline.c b/demux/demux_timeline.c
+index bb91441c..c0bcb4e3 100644
+--- a/demux/demux_timeline.c
++++ b/demux/demux_timeline.c
+@@ -32,6 +32,7 @@ struct segment {
+     int index; // index into virtual_source.segments[] (and timeline.parts[])
+     double start, end;
+     double d_start;
++    double seek_preroll;
+     char *url;
+     bool lazy;
+     struct demuxer *d;
+@@ -253,8 +254,20 @@ static void switch_segment(struct demuxer *demuxer, struct virtual_source *src,
+         demux_set_ts_offset(new->d, new->start - new->d_start);
+     else if (src->rebase)
+         demux_set_ts_offset(new->d, new->start - new->d->start_time);
+-    if (!src->no_clip || !init)
+-        demux_seek(new->d, start_pts, flags);
++    if (!src->no_clip || !init) {
++        double seek_pts = start_pts;
++        if (!src->no_clip && new->seek_preroll > 0) {
++            // Timestamp seeking (e.g. MPEG-TS) need not land on a RAP.
++            // Decode the preceding source window even on automatic switches.
++            // Packet start/end still delimit the authored presentation range.
++            // A leading RAP DTS can precede presentation start (B frames).
++            // Source seek owns beginning-of-file selection; presentation
++            // start is not a lower bound for the decode window.
++            seek_pts -= new->seek_preroll;
++            flags = (flags & ~SEEK_FORWARD) | SEEK_HR;
++        }
++        demux_seek(new->d, seek_pts, flags);
++    }
+ 
+     for (int n = 0; n < src->num_streams; n++) {
+         struct virtual_stream *vs = src->streams[n];
+@@ -627,6 +640,7 @@ static bool add_tl(struct demuxer *demuxer, struct timeline_par *tl)
+             .url = part->source ? part->source->filename : part->url,
+             .lazy = !part->source,
+             .d_start = part->source_start,
++            .seek_preroll = part->seek_preroll,
+             .start = part->start,
+             .end = part->end,
+         };
+diff --git a/DOCS/edl-mpv.rst b/DOCS/edl-mpv.rst
+index aeec4b7b..3142ca4e 100644
+--- a/DOCS/edl-mpv.rst
++++ b/DOCS/edl-mpv.rst
+@@ -341,6 +341,23 @@ Example::
+ 
+ Plays chapter 3 and ends with the start of chapter 7 (4 chapters later).
+ 
++WWPlayer isolated segment-preroll extension
++==========================================
++
++The P1 candidate accepts ``!wwplayer_preroll,version=1`` and a ``preroll``
++parameter on each segment. The mandatory header is rejected by unextended
++runtimes, preventing silent consumption of unsupported decode windows.
++
++``preroll`` is a finite, non-negative number of seconds. For a clipped
++timeline, a segment switch or seek reads this window before its source target,
++Source seek owns beginning-of-file selection; a leading RAP DTS can precede
++the reported presentation start. The authored segment start, end, duration,
++and packet presentation clipping remain unchanged. It is not a playback delay
++or a second seek. DASH and ``no_clip`` do not support this parameter.
++
++This is a WWPlayer segment-preroll extension, not upstream EDL syntax.
++Omitting ``preroll`` preserves the existing behavior.
++
+ Implicit chapters
+ =================
+ 

@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "ffmpeg": {
+    "repository": "https://git.ffmpeg.org/ffmpeg.git",
+    "commit": "ad53728984531cebdb027e70e78d7165a6bdfe20",
+    "version": "N-125871-gad5372898",
+    "patches": [
+      "patches/0001-http-complete-response-eof.patch"
+    ]
+  },
+  "protocolVersion": 1
+}

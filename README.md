@@ -3,7 +3,7 @@
 本仓库维护 WWPlayer 实际分发的第三方组件源码版本、修改补丁、构建材料和许可。
 WWPlayer 自有界面、业务与原生辅助程序代码保持独立。
 
-当前 Windows x64 原生配置：`v1.3.1-native.2`。
+当前 Windows x64 原生配置：`v1.3.5-native.1`。
 完整对应源码归档位于该标签的 GitHub Release；下载无需登录或付费。
 
 仓库保存可审阅的配置、补丁、重建脚本及版权文本；体积较大的原版源码归档
@@ -13,6 +13,9 @@ WWPlayer 自有界面、业务与原生辅助程序代码保持独立。
 不启用 GPL/nonfree 组件，FFmpeg 通过共享 DLL 使用。
 libarchive 明确禁用 LZO，并将其静态归档绑定到独立依赖前缀，排除旧工具链
 中 LZO 启用配置带来的传递依赖风险。
+
+此版本增加 FFmpeg 完整分块 HTTP 响应的 EOF 修复，并修正独立重建入口
+在其他 Git 仓库内应用补丁的行为。
 
 先下载完整源码归档，再阅读其中的 `README.md`。
 独立入口 `build-scripts/rebuild-libraries.mjs` 只重建第三方库，

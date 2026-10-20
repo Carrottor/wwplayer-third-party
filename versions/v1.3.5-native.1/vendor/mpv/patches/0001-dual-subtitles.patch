@@ -1,0 +1,313 @@
+diff --git a/options/options.c b/options/options.c
+index 3287d1c430..0066ab58f7 100644
+--- a/options/options.c
++++ b/options/options.c
+@@ -346,6 +346,7 @@ const struct m_sub_options mp_subtitle_sub_opts = {
+         {"sub-scale-with-window", OPT_BOOL(sub_scale_with_window)},
+         {"sub-ass-scale-with-window", OPT_BOOL(ass_scale_with_window)},
+         {"sub", OPT_SUBSTRUCT(sub_style, sub_style_conf)},
++        {"secondary-sub", OPT_SUBSTRUCT(secondary_sub_style, secondary_sub_style_conf)},
+         {"sub-clear-on-seek", OPT_BOOL(sub_clear_on_seek)},
+         {"teletext-page", OPT_INT(teletext_page), M_RANGE(-1, 999), .flags = UPDATE_SUB_FILT},
+         {"sub-past-video-end", OPT_BOOL(sub_past_video_end)},
+@@ -380,6 +381,10 @@ const struct m_sub_options mp_subtitle_sub_opts = {
+ 
+ const struct m_sub_options mp_subtitle_shared_sub_opts = {
+     .opts = (const struct m_option[]){
++        {"secondary-sub-placement", OPT_CHOICE(secondary_sub_placement,
++            {"top", 0}, {"below-main", 1}, {"above-main", 2}, {"bottom", 3})},
++        {"secondary-sub-follow", OPT_BOOL(secondary_sub_follow)},
++        {"secondary-sub-gap", OPT_FLOAT(secondary_sub_gap), M_RANGE(0, 64)},
+         {"sub-delay", OPT_DOUBLE(sub_delay[0])},
+         {"secondary-sub-delay", OPT_DOUBLE(sub_delay[1])},
+         {"sub-pos", OPT_FLOAT(sub_pos[0]), M_RANGE(0.0, 150.0)},
+@@ -411,6 +416,8 @@ const struct m_sub_options mp_subtitle_shared_sub_opts = {
+         .sub_pos[0] = 100,
+         .sub_scale[0] = 1,
+         .sub_scale[1] = 1,
++        .secondary_sub_gap = 8,
++        .secondary_sub_placement = 1,
+         .ass_style_override[0] = ASS_STYLE_OVERRIDE_SCALE,
+         .ass_style_override[1] = ASS_STYLE_OVERRIDE_STRIP,
+     },
+diff --git a/options/options.h b/options/options.h
+index 26a791343f..0cb8b0fd16 100644
+--- a/options/options.h
++++ b/options/options.h
+@@ -110,6 +110,7 @@ struct mp_subtitle_opts {
+     bool sub_scale_with_window;
+     bool ass_scale_with_window;
+     struct osd_style_opts *sub_style;
++    struct osd_style_opts *secondary_sub_style;
+     bool sub_scale_signs;
+     float sub_gauss;
+     bool sub_gray;
+@@ -143,6 +144,9 @@ struct mp_subtitle_shared_opts {
+     float sub_scale[2];
+     bool sub_visibility[2];
+     int ass_style_override[2];
++    bool secondary_sub_follow;
++    float secondary_sub_gap;
++    int secondary_sub_placement;
+ };
+ 
+ struct mp_osd_render_opts {
+diff --git a/sub/dec_sub.c b/sub/dec_sub.c
+index 33b3878660..4b86f430bd 100644
+--- a/sub/dec_sub.c
++++ b/sub/dec_sub.c
+@@ -635,3 +635,11 @@ struct sub_lines *sub_get_lines(struct dec_sub *sub)
+     mp_mutex_unlock(&sub->lock);
+     return res;
+ }
++
++bool sub_is_plaintext(struct dec_sub *sub)
++{
++    if (!sub || !sub->codec || !sub->codec->codec) return false;
++    const char *c = sub->codec->codec;
++    return !strcmp(c, "subrip") || !strcmp(c, "srt") || !strcmp(c, "webvtt") ||
++           !strcmp(c, "text") || !strcmp(c, "mov_text") || !strcmp(c, "microdvd");
++}
+diff --git a/sub/dec_sub.h b/sub/dec_sub.h
+index 63832cb68d..28b7536635 100644
+--- a/sub/dec_sub.h
++++ b/sub/dec_sub.h
+@@ -75,6 +75,7 @@ void sub_set_recorder_sink(struct dec_sub *sub, struct mp_recorder_sink *sink);
+ void sub_set_play_dir(struct dec_sub *sub, int dir);
+ bool sub_is_primary_visible(struct dec_sub *sub);
+ bool sub_is_secondary_visible(struct dec_sub *sub);
++bool sub_is_plaintext(struct dec_sub *sub);
+ 
+ int sub_control(struct dec_sub *sub, enum sd_ctrl cmd, void *arg);
+ 
+diff --git a/sub/osd.c b/sub/osd.c
+index 0a073bd711..1334eaf96a 100644
+--- a/sub/osd.c
++++ b/sub/osd.c
+@@ -18,6 +18,8 @@
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <assert.h>
++#include <limits.h>
++#include <math.h>
+ 
+ #include <libavutil/common.h>
+ 
+@@ -97,10 +99,8 @@ const struct m_sub_options osd_style_conf = {
+     .change_flags = UPDATE_OSD,
+ };
+ 
+-const struct m_sub_options sub_style_conf = {
+-    .opts = style_opts,
+-    .size = sizeof(struct osd_style_opts),
+-    .defaults = &(const struct osd_style_opts){
++static const struct osd_style_opts subtitle_style_defaults = {
++
+         .font = "sans-serif",
+         .font_size = 38,
+         .color = {255, 255, 255, 255},
+@@ -113,8 +113,18 @@ const struct m_sub_options sub_style_conf = {
+         .margin_y = 34,
+         .align_x = 0,
+         .align_y = 1,
+-    },
+-    .change_flags = UPDATE_OSD,
++
++};
++
++const struct m_sub_options sub_style_conf = {
++    .opts = style_opts, .size = sizeof(struct osd_style_opts),
++    .defaults = &subtitle_style_defaults, .change_flags = UPDATE_OSD,
++};
++
++// A distinct descriptor is required by m_config; defaults remain single-owned.
++const struct m_sub_options secondary_sub_style_conf = {
++    .opts = style_opts, .size = sizeof(struct osd_style_opts),
++    .defaults = &subtitle_style_defaults, .change_flags = UPDATE_OSD,
+ };
+ 
+ #undef OPT_BASE_STRUCT
+@@ -181,6 +191,8 @@ struct osd_state *osd_create(struct mpv_global *global)
+         osd->objs[n] = obj;
+     }
+ 
++    osd->subtitle_opts_cache = m_config_cache_alloc(osd, global, &mp_subtitle_shared_sub_opts);
++    osd->subtitle_opts = osd->subtitle_opts_cache->opts;
+     osd->objs[OSDTYPE_SUB]->is_sub = true;
+     osd->objs[OSDTYPE_SUB2]->is_sub = true;
+ 
+@@ -358,6 +370,86 @@ static struct sub_bitmaps *render_object(struct osd_state *osd,
+     return res;
+ }
+ 
++// Measure the rendered glyph/border parts, not guessed line counts.
++static void stack_subtitles(struct osd_state *osd, struct sub_bitmap_list *list,
++                            struct mp_osd_res res)
++{
++    m_config_cache_update(osd->subtitle_opts_cache);
++    struct sub_bitmaps *blocks[2] = {0};
++    int top[2] = {INT_MAX, INT_MAX}, bottom[2] = {0}, offset[2] = {0};
++    for (int n = 0; n < list->num_items; n++) {
++        struct sub_bitmaps *b = list->items[n];
++        if (b->render_index != OSDTYPE_SUB && b->render_index != OSDTYPE_SUB2) continue;
++        int i = b->render_index - OSDTYPE_SUB;
++        blocks[i] = b;
++        for (int k = 0; k < b->num_parts; k++) {
++            top[i] = MPMIN(top[i], b->parts[k].y);
++            bottom[i] = MPMAX(bottom[i], b->parts[k].y + b->parts[k].dh);
++        }
++    }
++    // ASS default keeps all authored positions. An explicit height change
++    // translates the whole block without stripping tags or altering glyphs.
++    for (int i = 0; i < 2; i++) {
++        if (blocks[i] && !sub_is_plaintext(osd->objs[i]->sub) &&
++            !osd->subtitle_opts->ass_style_override[i] && osd->subtitle_opts->sub_pos[i] != 100) {
++            int height = bottom[i] - top[i];
++            offset[i] = lrint((res.h - height) * osd->subtitle_opts->sub_pos[i] / 100.0) - top[i];
++        }
++    }
++    // Placement operates on rendered blocks, including ASS and bitmap parts.
++    // It never strips authored tags or changes the primary track's style.
++    if (osd->subtitle_opts->secondary_sub_follow && blocks[1]) {
++        int gap = lrint(osd->subtitle_opts->secondary_sub_gap * res.h / 720.0);
++        int margin = lrint(24.0 * res.h / 720.0);
++        int lower = res.h - margin;
++        int height = bottom[1] - top[1];
++        int primary_top = blocks[0] ? top[0] + offset[0] : lower;
++        int primary_bottom = blocks[0] ? bottom[0] + offset[0] :
++            MPCLAMP(lrint(res.h * osd->subtitle_opts->sub_pos[0] / 100.0), margin, lower);
++        switch (osd->subtitle_opts->secondary_sub_placement) {
++        case 0: // Top. Only move primary if it occupies the same space.
++            offset[1] = margin - top[1];
++            if (blocks[0] && primary_top < margin + height + gap)
++                offset[0] += margin + height + gap - primary_top;
++            break;
++        case 2: // Above primary, preserving the primary bottom anchor.
++            offset[1] = primary_top - gap - bottom[1];
++            break;
++        case 3: // Bottom. Reserve a disjoint block for a bottom primary.
++            offset[1] = lower - bottom[1];
++            if (blocks[0] && primary_bottom > lower - height - gap)
++                offset[0] += lower - height - gap - primary_bottom;
++            break;
++        default: // Below primary; both grow upwards from the primary anchor.
++            offset[1] = primary_bottom - bottom[1];
++            if (blocks[0]) offset[0] -= height + gap;
++            break;
++        }
++        // Keep fitting groups within the viewport without guessing line counts
++        // or silently changing the selected font size.
++        int group_top = top[1] + offset[1], group_bottom = bottom[1] + offset[1];
++        if (blocks[0]) {
++            group_top = MPMIN(group_top, top[0] + offset[0]);
++            group_bottom = MPMAX(group_bottom, bottom[0] + offset[0]);
++        }
++        if (group_bottom - group_top <= lower - margin) {
++            int shift = group_top < margin ? margin - group_top :
++                group_bottom > lower ? lower - group_bottom : 0;
++            offset[1] += shift;
++            if (blocks[0]) offset[0] += shift;
++        }
++    }
++    for (int i = 0; i < 2; i++) {
++        struct osd_object *obj = osd->objs[i];
++        if (obj->subtitle_stack_offset != offset[i]) {
++            obj->subtitle_stack_offset = offset[i]; obj->vo_change_id++; list->change_id++;
++        }
++        if (!blocks[i]) continue;
++        blocks[i]->change_id = obj->vo_change_id;
++        for (int k = 0; k < blocks[i]->num_parts; k++) blocks[i]->parts[k].y += offset[i];
++    }
++}
++
+ // Render OSD to a list of bitmap and return it. The returned object is
+ // refcounted. Typically you should hold it only for a short time, and then
+ // release it.
+@@ -418,6 +510,8 @@ struct sub_bitmap_list *osd_render(struct osd_state *osd, struct mp_osd_res res,
+         talloc_free(imgs);
+     }
+ 
++    stack_subtitles(osd, list, res);
++
+     double elapsed = MP_TIME_NS_TO_MS(mp_time_ns() - start_time);
+     bool slow = elapsed > 5;
+     mp_msg(osd->log, slow ? MSGL_DEBUG : MSGL_TRACE, "Spent %.3f ms in %s%s\n",
+diff --git a/sub/osd.h b/sub/osd.h
+index b62836e517..8bd1dbdc8f 100644
+--- a/sub/osd.h
++++ b/sub/osd.h
+@@ -190,6 +190,7 @@ struct osd_bar_style_opts {
+ 
+ extern const struct m_sub_options osd_style_conf;
+ extern const struct m_sub_options sub_style_conf;
++extern const struct m_sub_options secondary_sub_style_conf;
+ extern const struct m_sub_options osd_bar_style_conf;
+ 
+ struct osd_state;
+diff --git a/sub/osd_state.h b/sub/osd_state.h
+index 57bd565c63..22accf2e3b 100644
+--- a/sub/osd_state.h
++++ b/sub/osd_state.h
+@@ -51,6 +51,7 @@ struct osd_object {
+ 
+     // VO cache state
+     int vo_change_id;
++    int subtitle_stack_offset;
+     struct mp_osd_res vo_res;
+     bool vo_had_output;
+ 
+@@ -80,6 +81,8 @@ struct osd_state {
+ 
+     struct m_config_cache *opts_cache;
+     struct mp_osd_render_opts *opts;
++    struct m_config_cache *subtitle_opts_cache;
++    struct mp_subtitle_shared_opts *subtitle_opts;
+     struct mpv_global *global;
+     struct mp_log *log;
+     struct stats_ctx *stats;
+diff --git a/sub/sd_ass.c b/sub/sd_ass.c
+index db4d67daca..aed8d30db3 100644
+--- a/sub/sd_ass.c
++++ b/sub/sd_ass.c
+@@ -133,7 +133,7 @@ static void mp_ass_add_default_styles(struct sd *sd, ASS_Track *track, struct mp
+         track->default_style = sid;
+         ASS_Style *style = track->styles + sid;
+         style->Name = strdup("Default");
+-        mp_ass_set_style(style, track->PlayResY, opts->sub_style);
++        mp_ass_set_style(style, track->PlayResY, (sd->order == 1 ? opts->secondary_sub_style : opts->sub_style));
+     }
+ 
+     if (shared_opts->ass_style_override[sd->order])
+@@ -240,7 +240,7 @@ static void enable_output(struct sd *sd, bool enable)
+     } else {
+         ctx->ass_renderer = ass_renderer_init(ctx->ass_library);
+ 
+-        mp_ass_configure_fonts(ctx->ass_renderer, sd->opts->sub_style,
++        mp_ass_configure_fonts(ctx->ass_renderer, (sd->order == 1 ? sd->opts->secondary_sub_style : sd->opts->sub_style),
+                                sd->global, sd->log);
+     }
+ }
+@@ -251,7 +251,7 @@ static void assobjects_init(struct sd *sd)
+     struct mp_subtitle_opts *opts = sd->opts;
+     struct mp_subtitle_shared_opts *shared_opts = sd->shared_opts;
+ 
+-    ctx->ass_library = mp_ass_init(sd->global, sd->opts->sub_style, sd->log);
++    ctx->ass_library = mp_ass_init(sd->global, (sd->order == 1 ? sd->opts->secondary_sub_style : sd->opts->sub_style), sd->log);
+     ass_set_extract_fonts(ctx->ass_library, opts->use_embedded_fonts);
+ 
+     add_subtitle_fonts(sd);
+@@ -592,12 +592,12 @@ static void configure_ass(struct sd *sd, struct mp_osd_res *dim,
+ #endif
+     ass_set_selective_style_override_enabled(priv, set_force_flags);
+     ASS_Style style = {0};
+-    mp_ass_set_style(&style, MP_ASS_FONT_PLAYRESY, opts->sub_style);
++    mp_ass_set_style(&style, MP_ASS_FONT_PLAYRESY, (sd->order == 1 ? opts->secondary_sub_style : opts->sub_style));
+     ass_set_selective_style_override(priv, &style);
+     free(style.FontName);
+     if (converted && track->default_style < track->n_styles) {
+         mp_ass_set_style(track->styles + track->default_style,
+-                         track->PlayResY, opts->sub_style);
++                         track->PlayResY, (sd->order == 1 ? opts->secondary_sub_style : opts->sub_style));
+     }
+     ass_set_font_scale(priv, set_font_scale);
+     ass_set_hinting(priv, set_hinting);
