@@ -1,0 +1,7 @@
+diff --git a/third_party/libjpeg-turbo b/third_party/libjpeg-turbo
+index 8ecba36..5966050 160000
+--- a/third_party/libjpeg-turbo
++++ b/third_party/libjpeg-turbo
+@@ -1 +1 @@
+-Subproject commit 8ecba3647edb6dd940463fedf38ca33a8e2a73d1
++Subproject commit 5966050641633f9298b03f6b99a625067b22a91c

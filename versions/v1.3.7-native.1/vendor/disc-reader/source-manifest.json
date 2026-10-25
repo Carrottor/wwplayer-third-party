@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 2,
+  "libbluray": {
+    "repository": "https://code.videolan.org/videolan/libbluray.git",
+    "commit": "d75c88e54c893e5cbf4c61d356477655eb435769",
+    "version": "1.5.0",
+    "license": "LGPL-2.1-or-later"
+  },
+  "libudfread": {
+    "repository": "https://code.videolan.org/videolan/libudfread.git",
+    "commit": "139a2194525f2745b98a98e4d8fa627d07440176",
+    "version": "1.2.0",
+    "license": "LGPL-2.1-or-later"
+  }
+}
