@@ -1,0 +1,117 @@
+{
+  "schemaVersion": 1,
+  "repository": "Carrottor/wwplayer-third-party",
+  "tag": "v1.3.9-native.1",
+  "releaseUrl": "https://github.com/Carrottor/wwplayer-third-party/releases/tag/v1.3.9-native.1",
+  "sourceDownloadUrl": "https://github.com/Carrottor/wwplayer-third-party/releases/download/v1.3.9-native.1/wwplayer-third-party-v1.3.9-native.1-sources.tar.gz",
+  "sourceSha256": "f7f7cd92bc5a58fdd672f1c213d24f3fe4d11dad5e7efd552410fbd1d8eb4d13",
+  "sourceBytes": 398311293,
+  "mpvCommit": "e8673660ab7ee5d4ea8f93e4bf3a6e170ab2a19a",
+  "ffmpegCommit": "ad53728984531cebdb027e70e78d7165a6bdfe20",
+  "ffmpegVersion": "N-125871-gad5372898",
+  "libmpvSha256": "91ed49701636dc45dfdf9f919a5dfa6327970a7afb161e601a25b3f929d2f966",
+  "patches": [
+    "patches/0001-dual-subtitles.patch",
+    "patches/0002-mingw-guid-linkage.patch",
+    "patches/0003-edl-segment-preroll.patch",
+    "patches/0004-lavf-redirected-playlist-base.patch",
+    "patches/0005-network-traffic-counter.patch"
+  ],
+  "libarchive": {
+    "commit": "280402b7f1e3a5ce89c1ba7a7d68b803771df82b",
+    "options": [
+      "-DBUILD_SHARED_LIBS=OFF",
+      "-DENABLE_LZO=OFF",
+      "-DENABLE_ZLIB=ON",
+      "-DENABLE_ZSTD=ON",
+      "-DENABLE_OPENSSL=ON",
+      "-DENABLE_BZip2=ON",
+      "-DENABLE_ICONV=ON",
+      "-DENABLE_LIBXML2=ON",
+      "-DENABLE_EXPAT=ON",
+      "-DENABLE_LZMA=ON",
+      "-DENABLE_CPIO=OFF",
+      "-DENABLE_CAT=OFF",
+      "-DENABLE_TAR=OFF",
+      "-DENABLE_WERROR=OFF",
+      "-DBUILD_TESTING=OFF",
+      "-DENABLE_TEST=OFF"
+    ],
+    "lzo": false
+  },
+  "ffmpegLibraries": [
+    {
+      "file": "avcodec-63.dll",
+      "sha256": "c618fb60b64739602019e8215f48b896528fbd6d22fbdd3e4dcbaca923880db9"
+    },
+    {
+      "file": "avdevice-63.dll",
+      "sha256": "31f2a1c1c6ebe5824f8f303822caf9f8c6420da3537cbd0f87985f2af2da5560"
+    },
+    {
+      "file": "avfilter-12.dll",
+      "sha256": "ef6ae527df6b4d9c6f0cb5e3e2a472fa1617a1da961d4531f5a9fa1f87371dfc"
+    },
+    {
+      "file": "avformat-63.dll",
+      "sha256": "a49c707677c29eff457572fea1d847565735683b9abae593e60f38e3eb18b34d"
+    },
+    {
+      "file": "avutil-61.dll",
+      "sha256": "edd1cb392e136c5ca8e560fc550a1d8f92439fe5bb5ac03abb3babe03f0e468d"
+    },
+    {
+      "file": "swresample-7.dll",
+      "sha256": "fb9899d857aa0b79d2c3b7892045666a25edd46251093043da380c6392260f13"
+    },
+    {
+      "file": "swscale-10.dll",
+      "sha256": "9a9e0c063e0e0f0cff8483cd52bc2d1931e4e821e001f7fb0fafabe69c2c6462"
+    }
+  ],
+  "sharpVersions": {
+    "aom": "3.14.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.4",
+    "cgif": "0.5.3",
+    "exif": "0.6.26",
+    "expat": "2.8.3",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.16",
+    "glib": "2.89.4",
+    "harfbuzz": "14.3.1",
+    "heif": "1.23.2",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.62.91",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.6",
+    "webp": "1.6.0",
+    "xml2": "2.15.3",
+    "zlib-ng": "2.3.3"
+  },
+  "ffmpegPatches": [
+    {
+      "file": "vendor/thumbnail-worker/patches/0001-http-complete-response-eof.patch",
+      "sha256": "2CF4AEFA0FBA418646B8958C940C3767CC68CFB112D71CE2EFEC4C6CD6467253"
+    },
+    {
+      "file": "vendor/thumbnail-worker/patches/0002-http-download-counter.patch",
+      "sha256": "F0CF227D8DEF61E3367A73318AF9FC7EFDB92A12BAB52F24348B8C9FA43C7B9F"
+    }
+  ],
+  "releasePostProcessing": {
+    "ffmpegDlls": "x86_64-w64-mingw32-strip --strip-all",
+    "debugSections": false,
+    "coffSymbols": false
+  }
+}

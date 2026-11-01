@@ -1,0 +1,14 @@
+diff --git a/3rdparty/fast_float b/3rdparty/fast_float
+index 97b54ca..f6df0f2 160000
+--- a/3rdparty/fast_float
++++ b/3rdparty/fast_float
+@@ -1 +1 @@
+-Subproject commit 97b54ca9e75f5303507699d27c6b4f4efe4641a1
++Subproject commit f6df0f29174054bb1ed06a9945416c8946a01292
+diff --git a/3rdparty/glad b/3rdparty/glad
+index 73db193..e3c14f9 160000
+--- a/3rdparty/glad
++++ b/3rdparty/glad
+@@ -1 +1 @@
+-Subproject commit 73db193f853e2ee079bf3ca8a64aa2eaf6459043
++Subproject commit e3c14f906127dea49ead20ff4d5878294d08b7ab

@@ -1,0 +1,280 @@
+diff --git a/common/global.h b/common/global.h
+--- a/common/global.h
++++ b/common/global.h
+@@ -1,6 +1,9 @@
+ #ifndef MPV_MPV_H
+ #define MPV_MPV_H
+ 
++#include <stdatomic.h>
++#include <stdint.h>
++
+ // This should be accessed by glue code only, never normal code.
+ // The only purpose of this is to make mpv library-safe.
+ // Think hard before adding new members.
+@@ -12,6 +15,8 @@ struct mpv_global {
+     struct stats_base *stats;
+     struct demux_packet_pool *packet_pool;
+     struct curl_ctx *curl;
++    // Application payload received from network inputs, including read-ahead.
++    atomic_uint_least64_t network_bytes;
+ };
+ 
+ #endif
+diff --git a/player/main.c b/player/main.c
+--- a/player/main.c
++++ b/player/main.c
+@@ -289,6 +289,7 @@ struct MPContext *mp_create(void)
+     mp_mutex_init(&mpctx->abort_lock);
+ 
+     mpctx->global = talloc_zero(mpctx, struct mpv_global);
++    atomic_init(&mpctx->global->network_bytes, 0);
+ 
+     demux_packet_pool_init(mpctx->global);
+     stats_global_init(mpctx->global);
+diff --git a/stream/stream.h b/stream/stream.h
+--- a/stream/stream.h
++++ b/stream/stream.h
+@@ -265,6 +265,7 @@ typedef struct stream {
+     // Read statistic for fill_buffer calls. All bytes read by fill_buffer() are
+     // added to this. The user can reset this as needed.
+     uint64_t total_unbuffered_read_bytes;
++    uint64_t network_read_accounted;
+     // Seek statistics. The user can reset this as needed.
+     uint64_t total_stream_seeks;
+ 
+diff --git a/stream/stream_lavf.c b/stream/stream_lavf.c
+--- a/stream/stream_lavf.c
++++ b/stream/stream_lavf.c
+@@ -21,6 +21,7 @@
+ 
+ #include "options/path.h"
+ #include "common/common.h"
++#include "common/global.h"
+ #include "common/msg.h"
+ #include "common/av_common.h"
+ #include "misc/thread_tools.h"
+@@ -54,10 +55,26 @@ static const char *const http_like[] =
+ static int open_f(stream_t *stream);
+ static struct mp_tags *read_icy(stream_t *stream);
+ 
++static void account_network_bytes(stream_t *s)
++{
++    AVIOContext *avio = s->priv;
++    if (!s->is_network || !avio)
++        return;
++    int64_t received = 0;
++    uint64_t total = av_opt_get_int(avio, "wwplayer_downloaded_bytes",
++        AV_OPT_SEARCH_CHILDREN, &received) >= 0 ? received : avio->bytes_read;
++    if (total > s->network_read_accounted) {
++        atomic_fetch_add_explicit(&s->global->network_bytes,
++            total - s->network_read_accounted, memory_order_relaxed);
++        s->network_read_accounted = total;
++    }
++}
++
+ static int fill_buffer(stream_t *s, void *buffer, int max_len)
+ {
+     AVIOContext *avio = s->priv;
+     int r = avio_read_partial(avio, buffer, max_len);
++    account_network_bytes(s);
+     return (r <= 0) ? -1 : r;
+ }
+ 
+@@ -74,7 +91,9 @@ static int write_buffer(stream_t *s, void *buffer, int len)
+ static int seek(stream_t *s, int64_t newpos)
+ {
+     AVIOContext *avio = s->priv;
+-    if (avio_seek(avio, newpos, SEEK_SET) < 0) {
++    int64_t result = avio_seek(avio, newpos, SEEK_SET);
++    account_network_bytes(s);
++    if (result < 0) {
+         return 0;
+     }
+     return 1;
+@@ -88,6 +107,7 @@ static int64_t get_size(stream_t *s)
+ 
+ static void close_f(stream_t *stream)
+ {
++    account_network_bytes(stream);
+     AVIOContext *avio = stream->priv;
+     /* NOTE: As of 2011 write streams must be manually flushed before close.
+      * Currently write_buffer() always flushes them after writing.
+@@ -437,6 +457,7 @@ static int open_f(stream_t *stream)
+     stream->streaming = true;
+     if (stream->info->stream_origin == STREAM_ORIGIN_NET)
+         stream->is_network = true;
++    account_network_bytes(stream);
+     res = STREAM_OK;
+ 
+ out:
+diff --git a/demux/demux_lavf.c b/demux/demux_lavf.c
+--- a/demux/demux_lavf.c
++++ b/demux/demux_lavf.c
+@@ -44,6 +44,7 @@
+ #include "common/msg.h"
+ #include "common/tags.h"
+ #include "common/av_common.h"
++#include "common/global.h"
+ #include "misc/bstr.h"
+ #include "misc/charset_conv.h"
+ #include "misc/thread_tools.h"
+@@ -223,7 +224,9 @@ static const struct format_hack format_hacks[] = {
+ struct nested_stream {
+     AVIOContext *id;
+     int64_t last_bytes;
++    uint64_t last_network_bytes;
+     void *curl_data;
++    bool network_traffic;
+ };
+ 
+ struct stream_info {
+@@ -284,6 +287,16 @@ static void update_read_stats(struct demuxer *demuxer)
+         int64_t new = cur - nest->last_bytes;
+         nest->last_bytes = cur;
+         demux_report_unbuffered_read_bytes(demuxer, new);
++        if (nest->network_traffic) {
++            int64_t received = 0;
++            uint64_t total = av_opt_get_int(nest->id, "wwplayer_downloaded_bytes",
++                AV_OPT_SEARCH_CHILDREN, &received) >= 0 ? received : cur;
++            if (total > nest->last_network_bytes) {
++                atomic_fetch_add_explicit(&demuxer->global->network_bytes,
++                    total - nest->last_network_bytes, memory_order_relaxed);
++                nest->last_network_bytes = total;
++            }
++        }
+     }
+ }
+ 
+@@ -992,6 +1005,8 @@ static int nested_io_open(struct AVFormatContext *s, AVIOContext **pb,
+         struct nested_stream nest = {
+             .id = *pb,
+             .curl_data = curl_data,
++            .network_traffic = !curl_data && strstr(url, "://") &&
++                               strncmp(url, "file:", 5) != 0,
+         };
+         MP_TARRAY_APPEND(priv, priv->nested, priv->num_nested, nest);
+     }
+@@ -1004,6 +1019,7 @@ static int nested_io_close2(struct AVFormatContext *s, AVIOContext *pb)
+     mp_require(demuxer);
+     lavf_priv_t *priv = demuxer->priv;
+ 
++    update_read_stats(demuxer);
+     MP_UNUSED void *curl_data = NULL;
+     for (int n = 0; n < priv->num_nested; n++) {
+         if (priv->nested[n].id == pb) {
+diff --git a/stream/stream_curl.c b/stream/stream_curl.c
+--- a/stream/stream_curl.c
++++ b/stream/stream_curl.c
+@@ -173,6 +173,7 @@ struct priv {
+     // Producer state. Only touched by the curl thread.
+     uint64_t request_start;    // absolute byte position of next request
+     uint64_t request_received; // bytes received in the current request
++    curl_off_t traffic_downloaded;
+     uint64_t request_end;      // exclusive byte cap (0 = unbounded)
+     int retry_count;           // consecutive failed attempts at request_start
+     bool active;               // handle is currently active in the multi
+@@ -413,6 +414,11 @@ static int xferinfo_callback(void *userdata, curl_off_t dl_total, curl_off_t dl_
+                              curl_off_t ul_total, curl_off_t ul_now)
+ {
+     struct priv *p = userdata;
++    if (dl_now > p->traffic_downloaded) {
++        atomic_fetch_add_explicit(&p->s->global->network_bytes,
++            dl_now - p->traffic_downloaded, memory_order_relaxed);
++        p->traffic_downloaded = dl_now;
++    }
+     return atomic_load_explicit(&p->aborted, memory_order_relaxed);
+ }
+ 
+@@ -658,6 +664,7 @@ static void start_request(struct priv *p)
+     }
+ 
+     p->request_received = 0;
++    p->traffic_downloaded = 0;
+     p->active = true;
+     curl_multi_add_handle(p->ctx->multi, p->curl);
+ }
+diff --git a/player/command.c b/player/command.c
+--- a/player/command.c
++++ b/player/command.c
+@@ -41,6 +41,7 @@
+ #include "external_files.h"
+ #include "common/av_common.h"
+ #include "common/codecs.h"
++#include "common/global.h"
+ #include "common/msg.h"
+ #include "common/msg_control.h"
+ #include "common/stats.h"
+@@ -1551,6 +1552,15 @@ static int mp_property_cache_speed(void *ctx, struct m_property *prop,
+     return m_property_int64_ro(action, arg, val);
+ }
+ 
++static int mp_property_wwplayer_network_bytes(void *ctx, struct m_property *prop,
++                                              int action, void *arg)
++{
++    MPContext *mpctx = ctx;
++    uint64_t bytes = atomic_load_explicit(&mpctx->global->network_bytes,
++                                          memory_order_relaxed);
++    return m_property_int64_ro(action, arg, bytes);
++}
++
+ static int mp_property_demuxer_cache_duration(void *ctx, struct m_property *prop,
+                                               int action, void *arg)
+ {
+@@ -4693,6 +4703,7 @@ static const struct m_property mp_properties_base[] = {
+     {"seeking", mp_property_seeking},
+     {"playback-abort", mp_property_playback_abort},
+     {"cache-speed", mp_property_cache_speed},
++    {"wwplayer-network-bytes", mp_property_wwplayer_network_bytes},
+     {"demuxer-cache-duration", mp_property_demuxer_cache_duration},
+     {"demuxer-cache-time", mp_property_demuxer_cache_time},
+     {"demuxer-cache-idle", mp_property_demuxer_cache_idle},
+@@ -8199,11 +8210,36 @@ static void command_event(struct MPContext *mpctx, int event, void *arg)
+     struct command_ctx *ctx = mpctx->command_ctx;
+ 
+     if (event == MPV_EVENT_START_FILE) {
++        mpctx->network_traffic_base = atomic_load_explicit(
++            &mpctx->global->network_bytes, memory_order_relaxed);
++        mpctx->network_traffic_reported = 0;
++        mpctx->network_traffic_entry =
++            ((mpv_event_start_file *)arg)->playlist_entry_id;
+         ctx->last_seek_pts = MP_NOPTS_VALUE;
+         ctx->marked_pts = MP_NOPTS_VALUE;
+         ctx->marked_permanent = false;
+     }
+ 
++    // Publish from the playback owner before its end-file event. Sampling a
++    // process counter later from a client can attribute the next file's reads
++    // to the previous file when resident playback changes quickly.
++    if (event == MP_EVENT_CACHE_UPDATE || event == MPV_EVENT_FILE_LOADED ||
++        event == MPV_EVENT_END_FILE) {
++        uint64_t total = atomic_load_explicit(&mpctx->global->network_bytes,
++                                              memory_order_relaxed) -
++                         mpctx->network_traffic_base;
++        if (total > mpctx->network_traffic_reported) {
++            char entry[32], bytes[32];
++            snprintf(entry, sizeof(entry), "%"PRId64, mpctx->network_traffic_entry);
++            snprintf(bytes, sizeof(bytes), "%"PRIu64,
++                     total - mpctx->network_traffic_reported);
++            const char *args[] = {"wwplayer-network-traffic", entry, bytes};
++            mpv_event_client_message message = {.num_args = 3, .args = args};
++            mp_client_broadcast_event(mpctx, MPV_EVENT_CLIENT_MESSAGE, &message);
++            mpctx->network_traffic_reported = total;
++        }
++    }
++
+     if (event == MPV_EVENT_PLAYBACK_RESTART) {
+         ctx->last_seek_time = mp_time_sec();
+         run_command_opts(mpctx);
+diff --git a/player/core.h b/player/core.h
+--- a/player/core.h
++++ b/player/core.h
+@@ -285,6 +285,9 @@ typedef struct MPContext {
+ 
+     struct playlist *playlist;
+     struct playlist_entry *playing; // currently playing file
++    uint64_t network_traffic_base;
++    uint64_t network_traffic_reported;
++    int64_t network_traffic_entry;
+     char *filename; // immutable copy of playing->filename (or NULL)
+     char *stream_open_filename;
+     char **playlist_paths; // used strictly for playlist validation

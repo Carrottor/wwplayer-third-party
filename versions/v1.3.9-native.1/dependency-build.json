@@ -1,0 +1,2524 @@
+{
+  "target": "x86_64-w64-mingw32",
+  "compiler": "gcc",
+  "packages": [
+    "zlib",
+    "libpng",
+    "brotli",
+    "freetype2",
+    "harfbuzz",
+    "fribidi",
+    "libiconv",
+    "expat",
+    "fontconfig",
+    "libunibreak",
+    "libass",
+    "libudfread",
+    "libxml2",
+    "libbluray",
+    "libmodplug",
+    "ogg",
+    "vorbis",
+    "vulkan-header",
+    "vulkan",
+    "libsdl2",
+    "libopenmpt",
+    "lame",
+    "libjpeg",
+    "lcms2",
+    "opus",
+    "libsoxr",
+    "speex",
+    "libbs2b",
+    "libvpx",
+    "libwebp",
+    "svtav1",
+    "xxhash",
+    "dav1d",
+    "uavs3d",
+    "graphengine",
+    "libzimg",
+    "zstd",
+    "openssl",
+    "libmysofa",
+    "libssh",
+    "libsrt",
+    "libvpl",
+    "highway",
+    "libjxl",
+    "glslang",
+    "spirv-headers",
+    "spirv-tools",
+    "shaderc",
+    "spirv-cross",
+    "glad",
+    "fast_float",
+    "libplacebo",
+    "libzvbi",
+    "libaribcaption",
+    "openal-soft",
+    "bzip2",
+    "xz",
+    "libarchive",
+    "luajit",
+    "mujs",
+    "uchardet",
+    "libsixel",
+    "subrandr",
+    "libva",
+    "amf-headers",
+    "nvcodec-headers",
+    "angle-headers"
+  ],
+  "libarchive": {
+    "commit": "280402b7f1e3a5ce89c1ba7a7d68b803771df82b",
+    "options": [
+      "-DBUILD_SHARED_LIBS=OFF",
+      "-DENABLE_LZO=OFF",
+      "-DENABLE_ZLIB=ON",
+      "-DENABLE_ZSTD=ON",
+      "-DENABLE_OPENSSL=ON",
+      "-DENABLE_BZip2=ON",
+      "-DENABLE_ICONV=ON",
+      "-DENABLE_LIBXML2=ON",
+      "-DENABLE_EXPAT=ON",
+      "-DENABLE_LZMA=ON",
+      "-DENABLE_CPIO=OFF",
+      "-DENABLE_CAT=OFF",
+      "-DENABLE_TAR=OFF",
+      "-DENABLE_WERROR=OFF",
+      "-DBUILD_TESTING=OFF",
+      "-DENABLE_TEST=OFF"
+    ],
+    "lzo": false
+  },
+  "curl": {
+    "version": "8.22.0",
+    "source": "curl-8.22.0-source.tar.gz"
+  },
+  "buildTool": {
+    "repository": "https://github.com/shinchiro/mpv-winbuild-cmake",
+    "baseCommit": "16739adb99ea7e86d309bfae12d90fc09ad890c8"
+  },
+  "environment": {
+    "PKG_CONFIG": "pkgconf --static",
+    "PKG_CONFIG_PATH": "",
+    "PKG_CONFIG_LIBDIR": "{prefix}/lib/pkgconfig"
+  },
+  "commands": {
+    "zlib": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/zlib",
+          "-B{build}/packages/zlib-prefix/src/zlib-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DINSTALL_PKGCONFIG_DIR={prefix}/lib/pkgconfig",
+          "-DSKIP_INSTALL_LIBRARIES=OFF",
+          "-DZLIB_COMPAT=ON",
+          "-DZLIB_ENABLE_TESTS=OFF",
+          "-DZLIBNG_ENABLE_TESTS=OFF",
+          "-DFNO_LTO_AVAILABLE=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/zlib-prefix/src/zlib-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/zlib-prefix/src/zlib-build",
+          "install"
+        ]
+      ]
+    },
+    "libpng": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libpng",
+          "-B{build}/packages/libpng-prefix/src/libpng-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DPNG_SHARED=OFF",
+          "-DPNG_TESTS=OFF",
+          "-DPNG_TOOLS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libpng-prefix/src/libpng-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libpng-prefix/src/libpng-build",
+          "install"
+        ]
+      ]
+    },
+    "brotli": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/brotli",
+          "-B{build}/packages/brotli-prefix/src/brotli-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DSHARE_INSTALL_PREFIX={prefix}",
+          "-DBROTLI_EMSCRIPTEN=OFF",
+          "-DBROTLI_BUILD_TOOLS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/brotli-prefix/src/brotli-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/brotli-prefix/src/brotli-build",
+          "install"
+        ]
+      ]
+    },
+    "freetype2": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/freetype2-prefix/src/freetype2-build",
+          "{sources}/freetype2",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dharfbuzz=disabled",
+          "-Dtests=disabled",
+          "-Dbrotli=enabled",
+          "-Dzlib=enabled",
+          "-Dpng=enabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/freetype2-prefix/src/freetype2-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/freetype2-prefix/src/freetype2-build",
+          "install"
+        ]
+      ]
+    },
+    "harfbuzz": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/harfbuzz-prefix/src/harfbuzz-build",
+          "{sources}/harfbuzz",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dicu=disabled",
+          "-Dglib=disabled",
+          "-Dgobject=disabled",
+          "-Dutilities=disabled",
+          "-Dtests=disabled",
+          "-Ddocs=disabled",
+          "-Dbenchmark=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/harfbuzz-prefix/src/harfbuzz-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/harfbuzz-prefix/src/harfbuzz-build",
+          "install"
+        ]
+      ]
+    },
+    "fribidi": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/fribidi-prefix/src/fribidi-build",
+          "{sources}/fribidi",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dcpp_args='-DFRIBIDI_LIB_STATIC'",
+          "-Ddocs=false",
+          "-Dbin=false",
+          "-Dtests=false"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/fribidi-prefix/src/fribidi-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/fribidi-prefix/src/fribidi-build",
+          "install"
+        ]
+      ]
+    },
+    "libiconv": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "{build}/packages/libiconv-prefix/src/libiconv/configure",
+          "--build=x86_64-w64-mingw32",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-nls",
+          "--disable-shared",
+          "--enable-extra-encodings"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "expat": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/expat/expat",
+          "-B{build}/packages/expat-prefix/src/expat-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DEXPAT_BUILD_DOCS=OFF",
+          "-DEXPAT_BUILD_EXAMPLES=OFF",
+          "-DEXPAT_BUILD_FUZZERS=OFF",
+          "-DEXPAT_BUILD_TESTS=OFF",
+          "-DEXPAT_BUILD_TOOLS=OFF",
+          "-DEXPAT_BUILD_PKGCONFIG=ON"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/expat-prefix/src/expat-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/expat-prefix/src/expat-build",
+          "install"
+        ]
+      ]
+    },
+    "fontconfig": {
+      "configure": [
+        [
+          "{wrapper}",
+          "sed",
+          "-i",
+          "s/both_libraries/library/g",
+          "{sources}/fontconfig/src/meson.build"
+        ],
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/fontconfig-prefix/src/fontconfig-build",
+          "{sources}/fontconfig",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Ddoc=disabled",
+          "-Dtests=disabled",
+          "-Dtools=disabled",
+          "-Dcache-build=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/fontconfig-prefix/src/fontconfig-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/fontconfig-prefix/src/fontconfig-build",
+          "install"
+        ]
+      ]
+    },
+    "libunibreak": {
+      "configure": [
+        [
+          "{wrapper}",
+          "{sources}/libunibreak/autogen.sh",
+          "&&",
+          "CONF=1",
+          "{sources}/libunibreak/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libass": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/libass-prefix/src/libass-build",
+          "{sources}/libass",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dfontconfig=enabled",
+          "-Ddirectwrite=enabled",
+          "-Dasm=enabled",
+          "-Dlibunibreak=enabled",
+          "-Dtest=disabled",
+          "-Dcompare=disabled",
+          "-Dprofile=disabled",
+          "-Dfuzz=disabled",
+          "-Dcheckasm=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libass-prefix/src/libass-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libass-prefix/src/libass-build",
+          "install"
+        ]
+      ]
+    },
+    "libudfread": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/libudfread-prefix/src/libudfread-build",
+          "{sources}/libudfread",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libudfread-prefix/src/libudfread-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libudfread-prefix/src/libudfread-build",
+          "install"
+        ]
+      ]
+    },
+    "libxml2": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libxml2",
+          "-B{build}/packages/libxml2-prefix/src/libxml2-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DLIBXML2_WITH_ZLIB=ON",
+          "-DLIBXML2_WITH_ICONV=ON",
+          "-DLIBXML2_WITH_LZMA=OFF",
+          "-DLIBXML2_WITH_PYTHON=OFF",
+          "-DLIBXML2_WITH_TESTS=OFF",
+          "-DLIBXML2_WITH_HTTP=OFF",
+          "-DLIBXML2_WITH_TREE=ON",
+          "-DLIBXML2_WITH_THREADS=ON",
+          "-DLIBXML2_WITH_THREAD_ALLOC=ON",
+          "-DLIBXML2_WITH_PROGRAMS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libxml2-prefix/src/libxml2-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libxml2-prefix/src/libxml2-build",
+          "install"
+        ]
+      ]
+    },
+    "libbluray": {
+      "configure": [
+        [
+          "{wrapper}",
+          "sed",
+          "-i",
+          "'/find_library/d'",
+          "{sources}/libbluray/meson.build"
+        ],
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/libbluray-prefix/src/libbluray-build",
+          "{sources}/libbluray",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Denable_tools=false",
+          "-Dbdj_jar=disabled",
+          "-Dfreetype=enabled",
+          "-Dlibxml2=enabled",
+          "-Dc_args='-Ddec_init=libbluray_dec_init'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libbluray-prefix/src/libbluray-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libbluray-prefix/src/libbluray-build",
+          "install"
+        ],
+        [
+          "{wrapper}",
+          "sed",
+          "-i",
+          "'s/-lbluray/-lbluray -lgdi32/'",
+          "{prefix}/lib/pkgconfig/libbluray.pc"
+        ]
+      ]
+    },
+    "libmodplug": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libmodplug",
+          "-B{build}/packages/libmodplug-prefix/src/libmodplug-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libmodplug-prefix/src/libmodplug-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libmodplug-prefix/src/libmodplug-build",
+          "install"
+        ],
+        [
+          "bash",
+          "-c",
+          "cp {build}/packages/libmodplug.pc {prefix}/lib/pkgconfig/libmodplug.pc"
+        ]
+      ]
+    },
+    "ogg": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/ogg",
+          "-B{build}/packages/ogg-prefix/src/ogg-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/ogg-prefix/src/ogg-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/ogg-prefix/src/ogg-build",
+          "install"
+        ]
+      ]
+    },
+    "vorbis": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/vorbis",
+          "-B{build}/packages/vorbis-prefix/src/vorbis-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/vorbis-prefix/src/vorbis-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/vorbis-prefix/src/vorbis-build",
+          "install"
+        ]
+      ]
+    },
+    "vulkan-header": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/vulkan-header",
+          "-B{build}/packages/vulkan-header-prefix/src/vulkan-header-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DVULKAN_HEADERS_ENABLE_MODULE=OFF"
+        ]
+      ],
+      "build": [],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/vulkan-header-prefix/src/vulkan-header-build",
+          "install"
+        ]
+      ]
+    },
+    "vulkan": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/vulkan",
+          "-B{build}/packages/vulkan-prefix/src/vulkan-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DVULKAN_HEADERS_INSTALL_DIR={prefix}",
+          "-DBUILD_TESTS=OFF",
+          "-DENABLE_WERROR=OFF",
+          "-DUSE_GAS=ON",
+          "-DBUILD_STATIC_LOADER=ON",
+          "-DCMAKE_C_FLAGS='",
+          "-D__STDC_FORMAT_MACROS",
+          "-DSTRSAFE_NO_DEPRECATE",
+          "-Dparse_number=cjson_parse_number'",
+          "-DCMAKE_CXX_FLAGS='",
+          "-D__STDC_FORMAT_MACROS",
+          "-fpermissive'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/vulkan-prefix/src/vulkan-build"
+        ]
+      ],
+      "install": [
+        [
+          "/usr/bin/cmake.exe",
+          "-E",
+          "copy",
+          "{build}/packages/vulkan-prefix/src/vulkan-build/loader/libvulkan.a",
+          "{prefix}/lib/libvulkan.a"
+        ],
+        [
+          "/usr/bin/cmake.exe",
+          "-E",
+          "copy",
+          "{build}/packages/vulkan-prefix/src/vulkan-build/loader/vulkan_own.pc",
+          "{prefix}/lib/pkgconfig/vulkan.pc"
+        ]
+      ]
+    },
+    "libsdl2": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libsdl2",
+          "-B{build}/packages/libsdl2-prefix/src/libsdl2-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DSDL_VULKAN=ON",
+          "-DSDL_TEST=OFF",
+          "-DSDL_TEST_LIBRARY=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsdl2-prefix/src/libsdl2-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsdl2-prefix/src/libsdl2-build",
+          "install"
+        ]
+      ]
+    },
+    "libopenmpt": {
+      "configure": [
+        [
+          "{wrapper}",
+          "autoreconf",
+          "-fi",
+          "&&",
+          "CONF=1",
+          "{build}/packages/libopenmpt-prefix/src/libopenmpt/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared",
+          "--disable-openmpt123",
+          "--disable-examples",
+          "--disable-tests",
+          "--disable-doxygen-doc",
+          "--disable-doxygen-html",
+          "--without-mpg123",
+          "--without-flac"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "lame": {
+      "configure": [
+        [
+          "{wrapper}",
+          "autoupdate",
+          "-f",
+          "&&",
+          "CONF=1",
+          "{sources}/lame/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared",
+          "--disable-frontend"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libjpeg": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libjpeg",
+          "-B{build}/packages/libjpeg-prefix/src/libjpeg-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DENABLE_STATIC=ON",
+          "-DENABLE_SHARED=OFF",
+          "-DWITH_TURBOJPEG=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libjpeg-prefix/src/libjpeg-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libjpeg-prefix/src/libjpeg-build",
+          "install"
+        ]
+      ]
+    },
+    "lcms2": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/lcms2-prefix/src/lcms2-build",
+          "{sources}/lcms2",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dfastfloat=true",
+          "-Dthreaded=true"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/lcms2-prefix/src/lcms2-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/lcms2-prefix/src/lcms2-build",
+          "install"
+        ]
+      ]
+    },
+    "opus": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/opus-prefix/src/opus-build",
+          "{build}/packages/opus-prefix/src/opus",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dhardening=false",
+          "-Dextra-programs=disabled",
+          "-Dtests=disabled",
+          "-Ddocs=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/opus-prefix/src/opus-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/opus-prefix/src/opus-build",
+          "install"
+        ]
+      ]
+    },
+    "libsoxr": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libsoxr",
+          "-B{build}/packages/libsoxr-prefix/src/libsoxr-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_TESTS=OFF",
+          "-DWITH_OPENMP=OFF",
+          "-DHAVE_WORDS_BIGENDIAN_EXITCODE=1",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsoxr-prefix/src/libsoxr-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsoxr-prefix/src/libsoxr-build",
+          "install"
+        ]
+      ]
+    },
+    "speex": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/speex-prefix/src/speex-build",
+          "{sources}/speex",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dtest-binaries=disabled",
+          "-Dtools=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/speex-prefix/src/speex-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/speex-prefix/src/speex-build",
+          "install"
+        ]
+      ]
+    },
+    "libbs2b": {
+      "configure": [
+        [
+          "{wrapper}",
+          "{sources}/libbs2b/autogen.sh",
+          "&&",
+          "CONF=1",
+          "{sources}/libbs2b/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--enable-static",
+          "--disable-shared"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libvpx": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "CROSS=x86_64-w64-mingw32-",
+          "{sources}/libvpx/configure",
+          "--extra-cflags='-fno-asynchronous-unwind-tables'",
+          "--target=x86_64-win64-gcc",
+          "--prefix={prefix}",
+          "--disable-examples",
+          "--disable-docs",
+          "--disable-tools",
+          "--disable-unit-tests",
+          "--disable-decode-perf-tests",
+          "--disable-encode-perf-tests",
+          "--as=yasm",
+          "--enable-debug",
+          "--enable-vp9-highbitdepth"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libwebp": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libwebp",
+          "-B{build}/packages/libwebp-prefix/src/libwebp-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DWEBP_BUILD_ANIM_UTILS=OFF",
+          "-DWEBP_BUILD_EXTRAS=OFF",
+          "-DWEBP_BUILD_WEBPMUX=OFF",
+          "-DWEBP_BUILD_WEBPINFO=OFF",
+          "-DWEBP_BUILD_CWEBP=OFF",
+          "-DWEBP_BUILD_DWEBP=OFF",
+          "-DWEBP_BUILD_GIF2WEBP=OFF",
+          "-DWEBP_BUILD_IMG2WEBP=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libwebp-prefix/src/libwebp-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libwebp-prefix/src/libwebp-build",
+          "install"
+        ]
+      ]
+    },
+    "svtav1": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/svtav1",
+          "-B{build}/packages/svtav1-prefix/src/svtav1-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DENABLE_AVX512=ON",
+          "-DBUILD_TESTING=OFF",
+          "-DBUILD_ENC=ON",
+          "-DSVT_AV1_LTO=OFF",
+          "-DBUILD_APPS=OFF",
+          "-DCMAKE_C_FLAGS='",
+          "-Dav1_cospi_arr_s32_data=svtav1_av1_cospi_arr_s32_data",
+          "-Dav1_fwd_txfm2d_16x16_avx512=svtav1_av1_fwd_txfm2d_16x16_avx512",
+          "-Dav1_fwd_txfm2d_32x32_avx512=svtav1_av1_fwd_txfm2d_32x32_avx512",
+          "-Dav1_fwd_txfm2d_64x64_avx512=svtav1_av1_fwd_txfm2d_64x64_avx512",
+          "-Dav1_fwd_txfm2d_32x64_avx512=svtav1_av1_fwd_txfm2d_32x64_avx512",
+          "-Dav1_fwd_txfm2d_64x32_avx512=svtav1_av1_fwd_txfm2d_64x32_avx512",
+          "-Dav1_fwd_txfm2d_16x64_avx512=svtav1_av1_fwd_txfm2d_16x64_avx512",
+          "-Dav1_fwd_txfm2d_64x16_avx512=svtav1_av1_fwd_txfm2d_64x16_avx512",
+          "-Dav1_fwd_txfm2d_16x32_avx512=svtav1_av1_fwd_txfm2d_16x32_avx512",
+          "-Dav1_fwd_txfm2d_32x16_avx512=svtav1_av1_fwd_txfm2d_32x16_avx512'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/svtav1-prefix/src/svtav1-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/svtav1-prefix/src/svtav1-build",
+          "install"
+        ]
+      ]
+    },
+    "xxhash": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/xxhash/build/cmake",
+          "-B{build}/packages/xxhash-prefix/src/xxhash-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DXXHASH_BUILD_XXHSUM=OFF",
+          "-DDISPATCH=ON",
+          "-DCMAKE_C_FLAGS='",
+          "-DXXH_X86DISPATCH_ALLOW_AVX=1'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/xxhash-prefix/src/xxhash-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/xxhash-prefix/src/xxhash-build",
+          "install"
+        ]
+      ]
+    },
+    "dav1d": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/dav1d-prefix/src/dav1d-build",
+          "{sources}/dav1d",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Denable_tools=false",
+          "-Denable_tests=false",
+          "-Dxxhash_muxer=enabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/dav1d-prefix/src/dav1d-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/dav1d-prefix/src/dav1d-build",
+          "install"
+        ]
+      ]
+    },
+    "uavs3d": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/uavs3d",
+          "-B{build}/packages/uavs3d-prefix/src/uavs3d-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DCOMPILE_10BIT=ON",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/uavs3d-prefix/src/uavs3d-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/uavs3d-prefix/src/uavs3d-build",
+          "install"
+        ]
+      ]
+    },
+    "graphengine": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "libzimg": {
+      "configure": [
+        [
+          "bash",
+          "-c",
+          "rm -rf {sources}/libzimg/graphengine"
+        ],
+        [
+          "bash",
+          "-c",
+          "ln -s {sources}/graphengine {sources}/libzimg/graphengine"
+        ],
+        [
+          "{wrapper}",
+          "{sources}/libzimg/autogen.sh",
+          "&&",
+          "CONF=1",
+          "{sources}/libzimg/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ],
+        [
+          "bash",
+          "-c",
+          "git -C {sources}/graphengine clean -dfx"
+        ]
+      ]
+    },
+    "zstd": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/zstd-prefix/src/zstd-build",
+          "{sources}/zstd/build/meson",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dlegacy_level=0",
+          "-Ddebug_level=0",
+          "-Dbin_programs=false",
+          "-Dzlib=disabled",
+          "-Dlzma=disabled",
+          "-Dlz4=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/zstd-prefix/src/zstd-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/zstd-prefix/src/zstd-build",
+          "install"
+        ]
+      ]
+    },
+    "openssl": {
+      "configure": [
+        [
+          "{wrapper}",
+          "mkdir",
+          "-p",
+          "apps/include"
+        ],
+        [
+          "{wrapper}",
+          "CONF=1",
+          "{sources}/openssl/Configure",
+          "--cross-compile-prefix=x86_64-w64-mingw32-",
+          "--prefix={prefix}",
+          "--libdir=lib",
+          "--release",
+          "no-autoload-config",
+          "mingw64",
+          "enable-ec_nistp_64_gcc_128",
+          "no-ssl3-method",
+          "enable-brotli",
+          "no-whirlpool",
+          "no-filenames",
+          "no-camellia",
+          "enable-zstd",
+          "no-capieng",
+          "no-shared",
+          "no-rmd160",
+          "no-module",
+          "no-legacy",
+          "no-tests",
+          "threads",
+          "no-docs",
+          "no-apps",
+          "no-ocsp",
+          "no-ssl3",
+          "no-cmac",
+          "no-mdc2",
+          "no-idea",
+          "no-cast",
+          "no-seed",
+          "no-aria",
+          "no-err",
+          "no-dso",
+          "no-dsa",
+          "no-srp",
+          "no-rc2",
+          "no-rc4",
+          "no-sm2",
+          "no-sm3",
+          "no-sm4",
+          "no-md4",
+          "no-cms",
+          "no-cmp",
+          "no-dh",
+          "no-bf",
+          "zlib"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "build_sw"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install_sw"
+        ]
+      ]
+    },
+    "libmysofa": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libmysofa",
+          "-B{build}/packages/libmysofa-prefix/src/libmysofa-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_TESTS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libmysofa-prefix/src/libmysofa-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libmysofa-prefix/src/libmysofa-build",
+          "install"
+        ]
+      ]
+    },
+    "libssh": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libssh",
+          "-B{build}/packages/libssh-prefix/src/libssh-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DWITH_ZLIB=ON",
+          "-DWITH_EXAMPLES=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libssh-prefix/src/libssh-build"
+        ],
+        [
+          "bash",
+          "-c",
+          "echo {'Libs.private: -lwsock32 -liphlpapi -lpthread','\nRequires.private: libssl','\nCflags.private: -DLIBSSH_STATIC'} >> {build}/packages/libssh-prefix/src/libssh-build/libssh.pc"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libssh-prefix/src/libssh-build",
+          "install"
+        ]
+      ]
+    },
+    "libsrt": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libsrt",
+          "-B{build}/packages/libsrt-prefix/src/libsrt-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DENABLE_STDCXX_SYNC=ON",
+          "-DENABLE_APPS=OFF",
+          "-DENABLE_SHARED=OFF",
+          "-DUSE_ENCLIB=openssl",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsrt-prefix/src/libsrt-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libsrt-prefix/src/libsrt-build",
+          "install"
+        ]
+      ]
+    },
+    "libvpl": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libvpl",
+          "-B{build}/packages/libvpl-prefix/src/libvpl-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_TESTS=OFF",
+          "-DBUILD_EXAMPLES=OFF",
+          "-DBUILD_EXPERIMENTAL=OFF",
+          "-DINSTALL_DEV=ON",
+          "-DINSTALL_LIB=ON"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libvpl-prefix/src/libvpl-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libvpl-prefix/src/libvpl-build",
+          "install"
+        ]
+      ]
+    },
+    "highway": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/highway-prefix/src/highway-build",
+          "{sources}/highway",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Dcontrib=disabled",
+          "-Dexamples=disabled",
+          "-Dtests=disabled"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/highway-prefix/src/highway-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/highway-prefix/src/highway-build",
+          "install"
+        ]
+      ]
+    },
+    "libjxl": {
+      "configure": [
+        [
+          "bash",
+          "-c",
+          "rm -rf {sources}/libjxl/third_party/libjpeg-turbo"
+        ],
+        [
+          "bash",
+          "-c",
+          "ln -s {sources}/libjpeg {sources}/libjxl/third_party/libjpeg-turbo"
+        ],
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libjxl",
+          "-B{build}/packages/libjxl-prefix/src/libjxl-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DCMAKE_POSITION_INDEPENDENT_CODE=ON",
+          "-DJPEGXL_STATIC=ON",
+          "-DBUILD_TESTING=OFF",
+          "-DJPEGXL_EMSCRIPTEN=OFF",
+          "-DJPEGXL_BUNDLE_LIBPNG=OFF",
+          "-DJPEGXL_ENABLE_TOOLS=OFF",
+          "-DJPEGXL_ENABLE_VIEWERS=OFF",
+          "-DJPEGXL_ENABLE_DOXYGEN=OFF",
+          "-DJPEGXL_ENABLE_EXAMPLES=OFF",
+          "-DJPEGXL_ENABLE_MANPAGES=OFF",
+          "-DJPEGXL_ENABLE_JNI=OFF",
+          "-DJPEGXL_ENABLE_SKCMS=OFF",
+          "-DJPEGXL_ENABLE_PLUGINS=OFF",
+          "-DJPEGXL_ENABLE_DEVTOOLS=OFF",
+          "-DJPEGXL_ENABLE_BENCHMARK=OFF",
+          "-DJPEGXL_ENABLE_SJPEG=OFF",
+          "-DJPEGXL_ENABLE_HWY_AVX3=ON",
+          "-DJPEGXL_ENABLE_HWY_AVX3_ZEN4=ON",
+          "-DJPEGXL_ENABLE_HWY_AVX3_SPR=ON",
+          "-DJPEGXL_FORCE_SYSTEM_LCMS2=ON",
+          "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON",
+          "-DJPEGXL_FORCE_SYSTEM_HWY=ON",
+          "-DCMAKE_CXX_FLAGS='",
+          "-Wa,-muse-unaligned-vector-move'",
+          "-DCMAKE_C_FLAGS='",
+          "-Wa,-muse-unaligned-vector-move'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libjxl-prefix/src/libjxl-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libjxl-prefix/src/libjxl-build",
+          "install"
+        ]
+      ]
+    },
+    "glslang": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "spirv-headers": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/spirv-headers",
+          "-B{build}/packages/spirv-headers-prefix/src/spirv-headers-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}"
+        ]
+      ],
+      "build": [],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/spirv-headers-prefix/src/spirv-headers-build",
+          "install"
+        ]
+      ]
+    },
+    "spirv-tools": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "shaderc": {
+      "configure": [
+        [
+          "{wrapper}",
+          "LTO_JOB=1",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/shaderc",
+          "-B{build}/packages/shaderc-prefix/src/shaderc-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DSHADERC_SKIP_TESTS=ON",
+          "-DSHADERC_SKIP_SPVC=ON",
+          "-DSHADERC_SKIP_INSTALL=ON",
+          "-DSHADERC_SKIP_EXAMPLES=ON",
+          "-DSPIRV_SKIP_EXECUTABLES=ON",
+          "-DSPIRV_SKIP_TESTS=ON",
+          "-DENABLE_SPIRV_TOOLS_INSTALL=ON",
+          "-DENABLE_GLSLANG_BINARIES=OFF",
+          "-DSPIRV_TOOLS_BUILD_STATIC=ON",
+          "-DSPIRV_TOOLS_LIBRARY_TYPE=STATIC",
+          "-DMINGW_COMPILER_PREFIX=x86_64-w64-mingw32",
+          "-DCMAKE_CXX_FLAGS='",
+          "-std=c++17'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "LTO_JOB=1",
+          "ninja",
+          "-C",
+          "{build}/packages/shaderc-prefix/src/shaderc-build"
+        ]
+      ],
+      "install": []
+    },
+    "spirv-cross": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/spirv-cross",
+          "-B{build}/packages/spirv-cross-prefix/src/spirv-cross-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DSPIRV_CROSS_SHARED=ON",
+          "-DSPIRV_CROSS_CLI=OFF",
+          "-DSPIRV_CROSS_ENABLE_TESTS=OFF",
+          "-DCMAKE_CXX_FLAGS='",
+          "-D__USE_MINGW_ANSI_STDIO'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/spirv-cross-prefix/src/spirv-cross-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/spirv-cross-prefix/src/spirv-cross-build",
+          "install"
+        ]
+      ]
+    },
+    "glad": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "fast_float": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "libplacebo": {
+      "configure": [
+        [
+          "bash",
+          "-c",
+          "rm -rf {sources}/libplacebo/3rdparty/glad"
+        ],
+        [
+          "bash",
+          "-c",
+          "rm -rf {sources}/libplacebo/3rdparty/fast_float"
+        ],
+        [
+          "bash",
+          "-c",
+          "ln -s {sources}/glad {sources}/libplacebo/3rdparty/glad"
+        ],
+        [
+          "bash",
+          "-c",
+          "ln -s {sources}/fast_float {sources}/libplacebo/3rdparty/fast_float"
+        ],
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/libplacebo-prefix/src/libplacebo-build",
+          "{sources}/libplacebo",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--default-library=static",
+          "-Dd3d11=enabled",
+          "-Ddebug=true",
+          "-Db_ndebug=true",
+          "-Doptimization=3",
+          "-Dvulkan-registry='{prefix}/share/vulkan/registry/vk.xml'",
+          "-Ddemos=false"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libplacebo-prefix/src/libplacebo-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libplacebo-prefix/src/libplacebo-build",
+          "install"
+        ]
+      ]
+    },
+    "libzvbi": {
+      "configure": [
+        [
+          "{wrapper}",
+          "{sources}/libzvbi/autogen.sh",
+          "&&",
+          "CONF=1",
+          "{sources}/libzvbi/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared",
+          "--enable-static",
+          "--with-pic",
+          "--without-doxygen",
+          "--without-x",
+          "--disable-dvb",
+          "--disable-bktr",
+          "--disable-nls",
+          "--disable-proxy",
+          "--disable-examples",
+          "--disable-tests"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libaribcaption": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libaribcaption",
+          "-B{build}/packages/libaribcaption-prefix/src/libaribcaption-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DARIBCC_BUILD_TESTS=OFF",
+          "-DARIBCC_SHARED_LIBRARY=OFF",
+          "-DARIBCC_USE_EMBEDDED_FREETYPE=OFF",
+          "-DARIBCC_NO_RTTI=ON",
+          "-DARIBCC_USE_FONTCONFIG=ON",
+          "-DARIBCC_USE_FREETYPE=ON",
+          "-DCMAKE_C_FLAGS='-DHAVE_OPENSSL=1'",
+          "-DCMAKE_CXX_FLAGS='-DHAVE_OPENSSL=1'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libaribcaption-prefix/src/libaribcaption-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libaribcaption-prefix/src/libaribcaption-build",
+          "install"
+        ]
+      ]
+    },
+    "openal-soft": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/openal-soft",
+          "-B{build}/packages/openal-soft-prefix/src/openal-soft-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DLIBTYPE=STATIC",
+          "-DALSOFT_ENABLE_MODULES=OFF",
+          "-DALSOFT_UTILS=OFF",
+          "-DALSOFT_EXAMPLES=OFF",
+          "-DALSOFT_TESTS=OFF",
+          "-DALSOFT_BACKEND_PIPEWIRE=OFF",
+          "-DCMAKE_C_FLAGS='-include",
+          "stdlib.h'",
+          "-DCMAKE_CXX_FLAGS='-I{sources}/openal-soft/gsl/include",
+          "-include",
+          "cstdlib'"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/openal-soft-prefix/src/openal-soft-build"
+        ],
+        [
+          "bash",
+          "-c",
+          "echo 'Libs.private: -lole32 -luuid -lshlwapi' >> {build}/packages/openal-soft-prefix/src/openal-soft-build/openal.pc"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/openal-soft-prefix/src/openal-soft-build",
+          "install"
+        ]
+      ]
+    },
+    "bzip2": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/bzip2",
+          "-B{build}/packages/bzip2-prefix/src/bzip2-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DENABLE_LIB_ONLY=ON",
+          "-DENABLE_SHARED_LIB=OFF",
+          "-DENABLE_STATIC_LIB=ON",
+          "-DENABLE_TESTS=OFF"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/bzip2-prefix/src/bzip2-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/bzip2-prefix/src/bzip2-build",
+          "install"
+        ],
+        [
+          "bash",
+          "-c",
+          "mv {prefix}/lib/libbz2_static.a {prefix}/lib/libbz2.a"
+        ]
+      ]
+    },
+    "xz": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "autoreconf",
+          "-fi",
+          "&&",
+          "{sources}/xz/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-shared",
+          "--disable-xz",
+          "--disable-xzdec",
+          "--disable-lzmadec",
+          "--disable-lzmainfo",
+          "--disable-doc"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "libarchive": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/libarchive",
+          "-B{build}/packages/libarchive-prefix/src/libarchive-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DCMAKE_INSTALL_LIBDIR=lib",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DENABLE_ZLIB=ON",
+          "-DENABLE_ZSTD=ON",
+          "-DENABLE_OPENSSL=ON",
+          "-DENABLE_BZip2=ON",
+          "-DENABLE_ICONV=ON",
+          "-DENABLE_LIBXML2=ON",
+          "-DENABLE_EXPAT=ON",
+          "-DENABLE_LZO=OFF",
+          "-DENABLE_LZMA=ON",
+          "-DENABLE_CPIO=OFF",
+          "-DENABLE_CAT=OFF",
+          "-DENABLE_TAR=OFF",
+          "-DENABLE_WERROR=OFF",
+          "-DBUILD_TESTING=OFF",
+          "-DENABLE_TEST=OFF",
+          "-DWINDOWS_VERSION=WIN10",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libarchive-prefix/src/libarchive-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libarchive-prefix/src/libarchive-build",
+          "install"
+        ]
+      ]
+    },
+    "luajit": {
+      "configure": [],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "-C",
+          "{sources}/luajit/src",
+          "HOST_CC='x86_64-w64-mingw32-gcc -m64'",
+          "CROSS=x86_64-w64-mingw32-\n    TARGET_SYS=Windows\n    BUILDMODE=static\n    FILE_T=luajit.exe\n    CFLAGS='-DUNICODE'\n    XCFLAGS='-DLUAJIT_ENABLE_LUA52COMPAT '\n    PREFIX={prefix} Q=",
+          "amalg"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "HOST_CC='x86_64-w64-mingw32-gcc -m64'",
+          "CROSS=x86_64-w64-mingw32-\n    TARGET_SYS=Windows\n    BUILDMODE=static\n    FILE_T=luajit.exe\n    CFLAGS='-DUNICODE'\n    XCFLAGS='-DLUAJIT_ENABLE_LUA52COMPAT '\n    PREFIX={prefix} Q=",
+          "install"
+        ]
+      ]
+    },
+    "mujs": {
+      "configure": [],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "-C",
+          "{sources}/mujs-1.3.7.e892c9f",
+          "CFLAGS='-UHAVE_READLINE' LIBREADLINE=''\nCC=x86_64-w64-mingw32-gcc\nAR=x86_64-w64-mingw32-ar\nRANLIB=x86_64-w64-mingw32-ranlib\nOUT={build}/packages/mujs-prefix/src/mujs-build\nprefix={prefix}\nhost=mingw"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "-C",
+          "{sources}/mujs-1.3.7.e892c9f",
+          "CFLAGS='-UHAVE_READLINE' LIBREADLINE=''\nCC=x86_64-w64-mingw32-gcc\nAR=x86_64-w64-mingw32-ar\nRANLIB=x86_64-w64-mingw32-ranlib\nOUT={build}/packages/mujs-prefix/src/mujs-build\nprefix={prefix}\nhost=mingw",
+          "install"
+        ]
+      ]
+    },
+    "uchardet": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "cmake",
+          "-H{sources}/uchardet",
+          "-B{build}/packages/uchardet-prefix/src/uchardet-build",
+          "-G",
+          "Ninja",
+          "-DCMAKE_BUILD_TYPE=Release",
+          "-DCMAKE_TOOLCHAIN_FILE={build}/toolchain.cmake",
+          "-DCMAKE_INSTALL_PREFIX={prefix}",
+          "-DCMAKE_FIND_ROOT_PATH={prefix}",
+          "-DBUILD_SHARED_LIBS=OFF",
+          "-DBUILD_STATIC=ON",
+          "-DBUILD_BINARY=OFF",
+          "-DTARGET_ARCHITECTURE=x86_64",
+          "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/uchardet-prefix/src/uchardet-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/uchardet-prefix/src/uchardet-build",
+          "install"
+        ]
+      ]
+    },
+    "libsixel": {
+      "configure": [
+        [
+          "{wrapper}",
+          "{sources}/libsixel/autogen.sh",
+          "&&",
+          "CONF=1",
+          "{sources}/libsixel/configure",
+          "--host=x86_64-w64-mingw32",
+          "--prefix={prefix}",
+          "--disable-img2sixel",
+          "--disable-sixel2png",
+          "--disable-python",
+          "--disable-shared",
+          "--disable-tests",
+          "--enable-static"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "install"
+        ]
+      ]
+    },
+    "subrandr": {
+      "configure": [],
+      "build": [
+        [
+          "{wrapper}",
+          "LD_PRELOAD=",
+          "CARGO_PROFILE_RELEASE_CODEGEN_UNITS=1",
+          "cargo",
+          "-Z",
+          "unstable-options",
+          "-C",
+          "{sources}/subrandr",
+          "xtask",
+          "install",
+          "--prefix",
+          "{prefix}",
+          "--target",
+          "x86_64-pc-windows-gnu",
+          "--static-library",
+          "true",
+          "--shared-library",
+          "false"
+        ]
+      ],
+      "install": []
+    },
+    "libva": {
+      "configure": [
+        [
+          "{wrapper}",
+          "CONF=1",
+          "meson",
+          "setup",
+          "{build}/packages/libva-prefix/src/libva-build",
+          "{sources}/libva",
+          "--prefix={prefix}",
+          "--libdir={prefix}/lib",
+          "--cross-file={build}/meson_cross.txt",
+          "--buildtype=release",
+          "--default-library=static",
+          "-Denable_docs=false"
+        ]
+      ],
+      "build": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libva-prefix/src/libva-build"
+        ]
+      ],
+      "install": [
+        [
+          "{wrapper}",
+          "ninja",
+          "-C",
+          "{build}/packages/libva-prefix/src/libva-build",
+          "install"
+        ],
+        [
+          "bash",
+          "-c",
+          "rm -rf {prefix}/lib/libva*.dll.a"
+        ]
+      ]
+    },
+    "amf-headers": {
+      "configure": [],
+      "build": [],
+      "install": []
+    },
+    "nvcodec-headers": {
+      "configure": [],
+      "build": [],
+      "install": [
+        [
+          "{wrapper}",
+          "make",
+          "-j8",
+          "-C",
+          "{sources}/nvcodec-headers",
+          "PREFIX={prefix}",
+          "install"
+        ]
+      ]
+    },
+    "angle-headers": {
+      "configure": [],
+      "build": [],
+      "install": []
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 2,
+  "mpv": {
+    "repository": "https://github.com/mpv-player/mpv.git",
+    "commit": "e8673660ab7ee5d4ea8f93e4bf3a6e170ab2a19a",
+    "version": "v0.41.0-1012-ge8673660a",
+    "patches": [
+      "patches/0001-dual-subtitles.patch",
+      "patches/0002-mingw-guid-linkage.patch",
+      "patches/0003-edl-segment-preroll.patch",
+      "patches/0004-lavf-redirected-playlist-base.patch",
+      "patches/0005-network-traffic-counter.patch"
+    ]
+  },
+  "runtime": {
+    "file": "libmpv-2.dll",
+    "size": 39385245,
+    "sha256": "91ED49701636DC45DFDF9F919A5DFA6327970A7AFB161E601A25B3F929D2F966",
+    "libraries": [
+      "avcodec-63.dll",
+      "avdevice-63.dll",
+      "avfilter-12.dll",
+      "avformat-63.dll",
+      "avutil-61.dll",
+      "swresample-7.dll",
+      "swscale-10.dll"
+    ],
+    "source": "wwplayer-lgpl-subtitles-disc",
+    "license": "LGPL-3.0-or-later"
+  }
+}

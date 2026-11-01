@@ -1,0 +1,13 @@
+diff --git a/libavformat/http.c b/libavformat/http.c
+--- a/libavformat/http.c
++++ b/libavformat/http.c
+@@ -1872,7 +1872,8 @@ retry:
+     read_ret = http_buf_read(h, buf, size);
+     while (read_ret < 0) {
+         uint64_t target = h->is_streamed ? 0 : s->off;
+-        bool is_premature = s->filesize > 0 && s->off < s->filesize;
++        bool is_premature = s->filesize != UINT64_MAX &&
++                            s->filesize > 0 && s->off < s->filesize;
+ 
+         if (read_ret == AVERROR_EXIT)
+             break;

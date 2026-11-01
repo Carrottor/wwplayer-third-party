@@ -1,0 +1,101 @@
+{
+  "packageVersion": "0.35.4",
+  "versions": {
+    "aom": "3.14.1",
+    "archive": "3.8.9",
+    "cairo": "1.18.4",
+    "cgif": "0.5.3",
+    "exif": "0.6.26",
+    "expat": "2.8.3",
+    "ffi": "3.8.0",
+    "fontconfig": "2.18.3",
+    "freetype": "2.14.3",
+    "fribidi": "1.0.16",
+    "glib": "2.89.4",
+    "harfbuzz": "14.3.1",
+    "heif": "1.23.2",
+    "highway": "1.4.0",
+    "imagequant": "2.4.1",
+    "lcms": "2.19.1",
+    "mozjpeg": "0826579",
+    "pango": "1.58.2",
+    "pixman": "0.46.4",
+    "png": "1.6.58",
+    "proxy-libintl": "0.5",
+    "rsvg": "2.62.91",
+    "tiff": "4.7.2",
+    "uhdr": "2.0.2",
+    "vips": "8.18.6",
+    "webp": "1.6.0",
+    "xml2": "2.15.3",
+    "zlib-ng": "2.3.3"
+  },
+  "entries": [
+    {
+      "name": "vips",
+      "version": "8.18.6",
+      "url": "https://codeload.github.com/libvips/libvips/tar.gz/refs/tags/v8.18.6",
+      "archive": "vips-8.18.6.tar.gz"
+    },
+    {
+      "name": "glib",
+      "version": "2.89.4",
+      "url": "https://download.gnome.org/sources/glib/2.89/glib-2.89.4.tar.xz",
+      "archive": "glib-2.89.4.tar.xz"
+    },
+    {
+      "name": "pango",
+      "version": "1.58.2",
+      "url": "https://download.gnome.org/sources/pango/1.58/pango-1.58.2.tar.xz",
+      "archive": "pango-1.58.2.tar.xz"
+    },
+    {
+      "name": "fribidi",
+      "version": "1.0.16",
+      "url": "https://codeload.github.com/fribidi/fribidi/tar.gz/refs/tags/v1.0.16",
+      "archive": "fribidi-1.0.16.tar.gz"
+    },
+    {
+      "name": "heif",
+      "version": "1.23.2",
+      "url": "https://codeload.github.com/strukturag/libheif/tar.gz/refs/tags/v1.23.2",
+      "archive": "heif-1.23.2.tar.gz"
+    },
+    {
+      "name": "exif",
+      "version": "0.6.26",
+      "url": "https://codeload.github.com/libexif/libexif/tar.gz/refs/tags/v0.6.26",
+      "archive": "exif-0.6.26.tar.gz"
+    },
+    {
+      "name": "rsvg",
+      "version": "2.62.91",
+      "url": "https://codeload.github.com/GNOME/librsvg/tar.gz/refs/tags/2.62.91",
+      "archive": "rsvg-2.62.91.tar.gz"
+    },
+    {
+      "name": "proxy-libintl",
+      "version": "0.5",
+      "url": "https://codeload.github.com/frida/proxy-libintl/tar.gz/refs/tags/0.5",
+      "archive": "proxy-libintl-0.5.tar.gz"
+    },
+    {
+      "name": "cairo",
+      "version": "1.18.4",
+      "url": "https://cairographics.org/releases/cairo-1.18.4.tar.xz",
+      "archive": "cairo-1.18.4.tar.xz"
+    },
+    {
+      "name": "sharp",
+      "version": "0.35.4",
+      "url": "https://codeload.github.com/lovell/sharp/tar.gz/refs/tags/v0.35.4",
+      "archive": "sharp-0.35.4.tar.gz"
+    },
+    {
+      "name": "sharp-libvips-build",
+      "version": "3c64aced824a33ab57c5922cfd6122054f1feb26",
+      "url": "https://codeload.github.com/lovell/sharp-libvips/tar.gz/3c64aced824a33ab57c5922cfd6122054f1feb26",
+      "archive": "sharp-libvips-build-3c64aced824a33ab57c5922cfd6122054f1feb26.tar.gz"
+    }
+  ]
+}

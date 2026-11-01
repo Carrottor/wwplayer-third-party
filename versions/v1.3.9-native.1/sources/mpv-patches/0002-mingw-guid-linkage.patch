@@ -1,0 +1,18 @@
+diff --git a/audio/out/ao_wasapi_utils.c b/audio/out/ao_wasapi_utils.c
+index a1e116b6c6..f4bea057e7 100644
+--- a/audio/out/ao_wasapi_utils.c
++++ b/audio/out/ao_wasapi_utils.c
+@@ -36,6 +36,13 @@
+ #include <propsys.h>
+ #include <functiondiscoverykeys_devpkey.h>
+ 
++// MinGW headers instantiate these SDK constants; static OpenAL also exports
++// their identical definitions. Give SDK GUID constants select-any linkage.
++#ifdef __MINGW32__
++extern const GUID KSDATAFORMAT_SUBTYPE_PCM __attribute__((weak));
++extern const GUID KSDATAFORMAT_SUBTYPE_IEEE_FLOAT __attribute__((weak));
++#endif
++
+ #include "audio/format.h"
+ #include "osdep/timer.h"
+ #include "osdep/io.h"

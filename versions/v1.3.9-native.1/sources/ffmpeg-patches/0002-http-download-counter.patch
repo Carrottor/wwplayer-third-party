@@ -1,0 +1,56 @@
+diff --git a/libavformat/http.c b/libavformat/http.c
+--- a/libavformat/http.c
++++ b/libavformat/http.c
+@@ -128,6 +128,9 @@ typedef struct HTTPContext {
+     AVDictionary *chained_options;
+     AVDictionary *redirect_cache;
+ 
++    /* Received HTTP response bodies, including header-time read-ahead. */
++    int64_t wwplayer_downloaded_bytes;
++
+     /* Connection statistics */
+     int nb_connections;
+     int nb_requests;
+@@ -187,6 +190,7 @@ typedef struct HTTPContext {
+ #define DEFAULT_USER_AGENT "Lavf/" AV_STRINGIFY(LIBAVFORMAT_VERSION)
+ 
+ static const AVOption http_options[] = {
++    { "wwplayer_downloaded_bytes", "received response body bytes", OFFSET(wwplayer_downloaded_bytes), AV_OPT_TYPE_INT64, { .i64 = 0 }, 0, INT64_MAX, AV_OPT_FLAG_EXPORT | AV_OPT_FLAG_READONLY },
+     { "seekable", "control seekability of connection", OFFSET(seekable), AV_OPT_TYPE_BOOL, { .i64 = -1 }, -1, 1, D },
+     { "chunked_post", "use chunked transfer-encoding for posts", OFFSET(chunked_post), AV_OPT_TYPE_BOOL, { .i64 = 1 }, 0, 1, E },
+     { "http_proxy", "set HTTP proxy to tunnel through", OFFSET(http_proxy), AV_OPT_TYPE_STRING, { .str = NULL }, 0, 0, D | E },
+@@ -861,6 +865,8 @@ static int http_getc(HTTPContext *s)
+         } else {
+             s->buf_ptr = s->buffer;
+             s->buf_end = s->buffer + len;
++            if (s->end_header)
++                s->wwplayer_downloaded_bytes += len;
+         }
+     }
+     return *s->buf_ptr++;
+@@ -1185,6 +1191,7 @@ static int process_line(URLContext *h, char *line, int line_count, int *parsed_h
+     /* end of header */
+     if (line[0] == '\0') {
+         s->end_header = 1;
++        s->wwplayer_downloaded_bytes += s->buf_end - s->buf_ptr;
+         return 0;
+     }
+ 
+@@ -1791,6 +1798,8 @@ static int http_buf_read(URLContext *h, uint8_t *buf, int size)
+         if (s->off == target_end && target_end < file_end)
+             return AVERROR(EAGAIN); /* reached end of content range */
+         len = ffurl_read(s->hd, buf, size);
++        if (len > 0)
++            s->wwplayer_downloaded_bytes += len;
+         if ((!len || len == AVERROR_EOF) &&
+             (!s->willclose || s->chunksize == UINT64_MAX) && s->off < target_end) {
+             av_log(h, AV_LOG_ERROR,
+@@ -2179,6 +2188,8 @@ static int64_t http_seek_internal(URLContext *h, int64_t off, int whence, int fo
+                "%"PRIu64" remaining byte(s)\n", s->off, remaining);
+         while (remaining) {
+             ret = ffurl_read(s->hd, discard, FFMIN(remaining, sizeof(discard)));
++            if (ret > 0)
++                s->wwplayer_downloaded_bytes += ret;
+             if (ret < 0 || ret == AVERROR_EOF || (ret == 0 && remaining)) {
+                 /* connection broken or stuck, need to reopen */
+                 ffurl_closep(&s->hd);

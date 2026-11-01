@@ -1,0 +1,31 @@
+--- a/stream/stream_lavf.c
++++ b/stream/stream_lavf.c
+@@ -409,11 +409,23 @@
+         uint8_t *mt = NULL;
+         if (av_opt_get(avio, "mime_type", AV_OPT_SEARCH_CHILDREN, &mt) >= 0) {
+             stream->mime_type = talloc_strdup(stream, mt);
+-            av_free(mt);
+-        }
+-    }
+-
+-    stream->priv = avio;
++            av_free(mt);
++        }
++        // Relative playlist entries are resolved against stream->url. HTTP
++        // redirects can change both the origin and the manifest directory.
++        uint8_t *location = NULL;
++        if ((!strncmp(stream->url, "http://", 7) ||
++             !strncmp(stream->url, "https://", 8)) &&
++            av_opt_get(avio, "location", AV_OPT_SEARCH_CHILDREN, &location) >= 0 &&
++            location && (!strncmp((char *)location, "http://", 7) ||
++                         !strncmp((char *)location, "https://", 8))) {
++            talloc_free(stream->url);
++            stream->url = talloc_strdup(stream, (char *)location);
++        }
++        av_free(location);
++    }
++
++    stream->priv = avio;
+     stream->seekable = avio->seekable & AVIO_SEEKABLE_NORMAL;
+     stream->seek = stream->seekable ? seek : NULL;
+     stream->fill_buffer = fill_buffer;
